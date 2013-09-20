@@ -10,11 +10,12 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.util.Log;
 
 public class MainActivity extends Activity
 {
 
-  
+  public static boolean ButtonChanged = false;
   Stack<CharSequence> undoStack = new Stack<CharSequence>();
   Stack<CharSequence> redoStack = new Stack<CharSequence>();
 
@@ -23,6 +24,7 @@ public class MainActivity extends Activity
   {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    TextListener();
   }
 
 
@@ -35,34 +37,66 @@ public class MainActivity extends Activity
   }
   
   @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-   
+  public boolean onOptionsItemSelected(MenuItem item) 
+  {
   CharSequence replaceText;
   EditText currentText = (EditText) findViewById(R.id.edit_message);
       switch (item.getItemId()) 
       {
+        
       case R.id.action_undo:
+        if(undoStack.empty())
+        {
+          Log.d("empty undo", "The undo stack is empty");
+        }
+        else
+        {
+          ButtonChanged = true;
           replaceText = undoStack.pop();
+          
+          Log.d("Replacement Text", replaceText.toString()); //GET RID OF THIS
+          
           redoStack.push(currentText.getText());
           currentText.setText(replaceText);
+          currentText.setSelection(replaceText.length());
+        }
+        return true;
       case R.id.action_redo:
+        if(redoStack.empty())
+        {
+          Log.d("empty redo", "The redo stack is empty");
+        }
+        else
+        {
+          ButtonChanged = true;
           replaceText = redoStack.pop();
           undoStack.push(currentText.getText());
           currentText.setText(replaceText);
-          }
+          currentText.setSelection(replaceText.length());
+        }
+        return true;
+        
+      default:
+          return super.onOptionsItemSelected(item);
+      }
            
-      return super.onOptionsItemSelected(item);
-      } 
+     
+  }
   
-  public void Listener()
+  public void TextListener()
   {
-    
     
     EditText messageText = (EditText) findViewById(R.id.edit_message);
     messageText.addTextChangedListener(new TextWatcher() 
     {
-      private int startingTime = 0;
-      String changeHolder;
+      
+      
+      private Calendar startingTime = Calendar.getInstance();
+      
+      private CharSequence toBePushed = ""; 
+      /* toBePushed holds the text that will be added to the undo stack next. This is so that we do not pop the most 
+       * recently added text. Think about setting this to initial message text to avoid issues when opening 
+       * a file. */
       
       public void afterTextChanged(Editable s) 
       {
@@ -73,22 +107,34 @@ public class MainActivity extends Activity
       {
       }
       
+      @Override 
       public void onTextChanged(CharSequence s, int start, 
           int before, int count)
       {
-        Calendar cal = Calendar.getInstance();
-        int second = cal.get(Calendar.SECOND);
-        
-        if(startingTime == 0)
+        if(ButtonChanged == true)
         {
-          startingTime = second;
+          ButtonChanged = false; 
+        }
+        else
+        {
           
+          Calendar cal = Calendar.getInstance();
+          
+          long timerInMilli = cal.getTimeInMillis();
+          long startInMilli = startingTime.getTimeInMillis();
+          
+         
+          if( timerInMilli - startInMilli > 5000 ) //Define Constant MILLISECONDs = 1000 and do 1*MILLISECONDS
+          {
+            undoStack.push(toBePushed.toString());
+            Log.d("Adding to undo:", toBePushed.toString());
+            toBePushed = s;
+            startingTime.setTimeInMillis(timerInMilli);  
+            
+          }
         }
-        if( second - startingTime > 2 )
-        {
-          undoStack.push(s);
-          startingTime = second; 
-        }
+        
+      
          
         
         
