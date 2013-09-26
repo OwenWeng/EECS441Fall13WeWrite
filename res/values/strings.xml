@@ -3,7 +3,10 @@
 
     <string name="app_name">WeWriteBeta</string>
 	<string name="edit_message">Enter a message</string>
-<!--    <string name="button_redo">Redo</string>   -->
+    <string name="create_session">Create Session</string>
+    <string name="join_session">Join Session</string>
+    <string name="leave_session">Leave Session</string>
+    <string name="base_file">Base File</string>
     <string name="action_undo">Undo</string>
     <string name="action_redo">Redo</string>
     <string name="title_activity_main">MainActivity</string>

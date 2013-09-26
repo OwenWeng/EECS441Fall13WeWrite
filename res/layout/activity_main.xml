@@ -4,18 +4,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal" >
-<!--    
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_redo" />
--->      
+
     <EditText android:id="@+id/edit_message"
         android:layout_weight="1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/edit_message" />
-    
-    
+
+    <Button
+        android:id="@+id/createSessionButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:hint="@string/create_session" />
+
+    <Button
+        android:id="@+id/joinSessionButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:hint="@string/join_session" />
+
+    <Button
+        android:id="@+id/leaveSessionButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:hint="@string/leave_session" />
+
+    <CheckBox
+        android:id="@+id/baseFile"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:hint="@string/base_file" />
     
 </LinearLayout>
