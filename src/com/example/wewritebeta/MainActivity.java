@@ -141,7 +141,7 @@ public class MainActivity extends Activity {
     messageText.addTextChangedListener(new TextWatcher() 
     {
       
-      
+      boolean dontPush = false;
       private Calendar startingTime = Calendar.getInstance();
       
       private CharSequence toBePushed = ""; 
@@ -165,6 +165,7 @@ public class MainActivity extends Activity {
         if(ButtonChanged == true)
         {
           ButtonChanged = false; 
+          dontPush = true;
         }
         else
         {
@@ -177,7 +178,11 @@ public class MainActivity extends Activity {
          
           if( timerInMilli - startInMilli > 5000 ) //Define Constant MILLISECONDs = 1000 and do 1*MILLISECONDS
           {
+            if(!dontPush)
+            {
             undoStack.push(toBePushed.toString());
+            }
+            dontPush = false;
             Log.d("Adding to undo:", toBePushed.toString());
             toBePushed = s;
             startingTime.setTimeInMillis(timerInMilli);  

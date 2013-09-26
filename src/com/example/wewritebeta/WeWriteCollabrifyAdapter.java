@@ -164,7 +164,7 @@ public class WeWriteCollabrifyAdapter extends CollabrifyAdapter
 
       @Override
       public void run() {
-        a.createSessionButton.setText("CreateSession");
+        a.createSessionButton.setText("Create");
       }
     });
   }

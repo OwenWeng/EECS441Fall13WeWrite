@@ -183,17 +183,19 @@ containing a value of this type.
         public static final int ic_launcher=0x7f020019;
     }
     public static final class id {
-        public static final int action_redo=0x7f05000b;
-        public static final int action_undo=0x7f05000a;
-        public static final int baseFile=0x7f050009;
-        public static final int createSessionButton=0x7f050006;
-        public static final int edit_message=0x7f050005;
+        public static final int RelativeLayout=0x7f050005;
+        public static final int action_redo=0x7f05000d;
+        public static final int action_undo=0x7f05000c;
+        public static final int baseFile=0x7f05000a;
+        public static final int createSessionButton=0x7f050007;
+        public static final int edit_message=0x7f050006;
         public static final int hybrid=0x7f050004;
-        public static final int joinSessionButton=0x7f050007;
-        public static final int leaveSessionButton=0x7f050008;
+        public static final int joinSessionButton=0x7f050008;
+        public static final int leaveSessionButton=0x7f050009;
         public static final int none=0x7f050000;
         public static final int normal=0x7f050001;
         public static final int satellite=0x7f050002;
+        public static final int session=0x7f05000b;
         public static final int terrain=0x7f050003;
     }
     public static final class layout {
@@ -203,8 +205,8 @@ containing a value of this type.
         public static final int main=0x7f090000;
     }
     public static final class string {
-        public static final int action_redo=0x7f060020;
-        public static final int action_undo=0x7f06001f;
+        public static final int action_redo=0x7f060021;
+        public static final int action_undo=0x7f060020;
         public static final int app_name=0x7f060015;
         /**   Title for notification shown when GooglePlayServices needs to be
         enabled for a application to work. [CHAR LIMIT=70] 
@@ -229,7 +231,7 @@ containing a value of this type.
         [CHAR LIMIT=70] 
          */
         public static final int auth_client_using_bad_version_title=0x7f06000f;
-        public static final int base_file=0x7f06001e;
+        public static final int base_file=0x7f06001f;
         /**  Button in confirmation dialog to enable Google Play services.  Clicking it
         will direct user to application settings of Google Play services where they
         can enable it [CHAR LIMIT=40] 
@@ -285,12 +287,13 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f06000e;
-        public static final int create_session=0x7f06001b;
+        public static final int create_session=0x7f06001c;
         public static final int edit_message=0x7f06001a;
         public static final int hello_world=0x7f060016;
-        public static final int join_session=0x7f06001c;
-        public static final int leave_session=0x7f06001d;
+        public static final int join_session=0x7f06001d;
+        public static final int leave_session=0x7f06001e;
         public static final int menu_settings=0x7f060017;
+        public static final int session=0x7f06001b;
         public static final int title_activity_main=0x7f060018;
         public static final int url=0x7f060019;
     }
