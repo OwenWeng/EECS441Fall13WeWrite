@@ -4,7 +4,7 @@ import com.example.wewritebeta.MessageProtos.EventCarrier;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 enum ChangeType{
-  UNDO, REDO,TEXT
+  INSERT, DELETE, CURSORMOVE
 }
 
 public class Event{

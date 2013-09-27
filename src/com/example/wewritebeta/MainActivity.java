@@ -43,7 +43,6 @@ public class MainActivity extends Activity {
   Stack<CharSequence> undoStack = new Stack<CharSequence>();
   Stack<CharSequence> redoStack = new Stack<CharSequence>();
   
-
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

@@ -12,9 +12,9 @@ message EventCarrier {
   
   enum EventType
   {
-  	TEXT = 0;
-  	UNDO = 1;
-  	REDO = 2;
+  	INSERT = 0;
+  	DELETE = 1;
+  	CURSOR = 2;
   }
   
   optional EventType type = 6;

@@ -224,40 +224,40 @@ public final class MessageProtos {
     public enum EventType
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
-       * <code>TEXT = 0;</code>
+       * <code>INSERT = 0;</code>
        */
-      TEXT(0, 0),
+      INSERT(0, 0),
       /**
-       * <code>UNDO = 1;</code>
+       * <code>DELETE = 1;</code>
        */
-      UNDO(1, 1),
+      DELETE(1, 1),
       /**
-       * <code>REDO = 2;</code>
+       * <code>CURSOR = 2;</code>
        */
-      REDO(2, 2),
+      CURSOR(2, 2),
       ;
 
       /**
-       * <code>TEXT = 0;</code>
+       * <code>INSERT = 0;</code>
        */
-      public static final int TEXT_VALUE = 0;
+      public static final int INSERT_VALUE = 0;
       /**
-       * <code>UNDO = 1;</code>
+       * <code>DELETE = 1;</code>
        */
-      public static final int UNDO_VALUE = 1;
+      public static final int DELETE_VALUE = 1;
       /**
-       * <code>REDO = 2;</code>
+       * <code>CURSOR = 2;</code>
        */
-      public static final int REDO_VALUE = 2;
+      public static final int CURSOR_VALUE = 2;
 
 
       public final int getNumber() { return value; }
 
       public static EventType valueOf(int value) {
         switch (value) {
-          case 0: return TEXT;
-          case 1: return UNDO;
-          case 2: return REDO;
+          case 0: return INSERT;
+          case 1: return DELETE;
+          case 2: return CURSOR;
           default: return null;
         }
       }
@@ -453,7 +453,7 @@ public final class MessageProtos {
       endIndex_ = 0;
       cursorLoc_ = 0;
       changedBy_ = "";
-      type_ = com.example.wewritebeta.MessageProtos.EventCarrier.EventType.TEXT;
+      type_ = com.example.wewritebeta.MessageProtos.EventCarrier.EventType.INSERT;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -649,7 +649,7 @@ public final class MessageProtos {
         bitField0_ = (bitField0_ & ~0x00000008);
         changedBy_ = "";
         bitField0_ = (bitField0_ & ~0x00000010);
-        type_ = com.example.wewritebeta.MessageProtos.EventCarrier.EventType.TEXT;
+        type_ = com.example.wewritebeta.MessageProtos.EventCarrier.EventType.INSERT;
         bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
@@ -1042,7 +1042,7 @@ public final class MessageProtos {
       }
 
       // optional .WeWriteBeta.EventCarrier.EventType type = 6;
-      private com.example.wewritebeta.MessageProtos.EventCarrier.EventType type_ = com.example.wewritebeta.MessageProtos.EventCarrier.EventType.TEXT;
+      private com.example.wewritebeta.MessageProtos.EventCarrier.EventType type_ = com.example.wewritebeta.MessageProtos.EventCarrier.EventType.INSERT;
       /**
        * <code>optional .WeWriteBeta.EventCarrier.EventType type = 6;</code>
        */
@@ -1072,7 +1072,7 @@ public final class MessageProtos {
        */
       public Builder clearType() {
         bitField0_ = (bitField0_ & ~0x00000020);
-        type_ = com.example.wewritebeta.MessageProtos.EventCarrier.EventType.TEXT;
+        type_ = com.example.wewritebeta.MessageProtos.EventCarrier.EventType.INSERT;
         onChanged();
         return this;
       }
@@ -1102,13 +1102,13 @@ public final class MessageProtos {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\rWeWrite.proto\022\013WeWriteBeta\"\306\001\n\014EventCa" +
+      "\n\rWeWrite.proto\022\013WeWriteBeta\"\314\001\n\014EventCa" +
       "rrier\022\014\n\004text\030\001 \003(\t\022\022\n\nstartIndex\030\002 \001(\005\022" +
       "\020\n\010endIndex\030\003 \001(\005\022\021\n\tcursorLoc\030\004 \001(\005\022\021\n\t" +
       "changedBy\030\005 \001(\t\0221\n\004type\030\006 \001(\0162#.WeWriteB" +
-      "eta.EventCarrier.EventType\")\n\tEventType\022" +
-      "\010\n\004TEXT\020\000\022\010\n\004UNDO\020\001\022\010\n\004REDO\020\002B(\n\027com.exa" +
-      "mple.wewritebetaB\rMessageProtos"
+      "eta.EventCarrier.EventType\"/\n\tEventType\022" +
+      "\n\n\006INSERT\020\000\022\n\n\006DELETE\020\001\022\n\n\006CURSOR\020\002B(\n\027c" +
+      "om.example.wewritebetaB\rMessageProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
