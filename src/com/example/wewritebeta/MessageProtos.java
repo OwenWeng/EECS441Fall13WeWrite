@@ -8,7 +8,7 @@ public final class MessageProtos {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface TextCarrierOrBuilder
+  public interface EventCarrierOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
     // repeated string text = 1;
@@ -31,50 +31,80 @@ public final class MessageProtos {
     com.google.protobuf.ByteString
         getTextBytes(int index);
 
-    // optional int32 cursorLoc = 2;
+    // optional int32 startIndex = 2;
     /**
-     * <code>optional int32 cursorLoc = 2;</code>
+     * <code>optional int32 startIndex = 2;</code>
+     */
+    boolean hasStartIndex();
+    /**
+     * <code>optional int32 startIndex = 2;</code>
+     */
+    int getStartIndex();
+
+    // optional int32 endIndex = 3;
+    /**
+     * <code>optional int32 endIndex = 3;</code>
+     */
+    boolean hasEndIndex();
+    /**
+     * <code>optional int32 endIndex = 3;</code>
+     */
+    int getEndIndex();
+
+    // optional int32 cursorLoc = 4;
+    /**
+     * <code>optional int32 cursorLoc = 4;</code>
      */
     boolean hasCursorLoc();
     /**
-     * <code>optional int32 cursorLoc = 2;</code>
+     * <code>optional int32 cursorLoc = 4;</code>
      */
     int getCursorLoc();
 
-    // optional string changedBy = 3;
+    // optional string changedBy = 5;
     /**
-     * <code>optional string changedBy = 3;</code>
+     * <code>optional string changedBy = 5;</code>
      */
     boolean hasChangedBy();
     /**
-     * <code>optional string changedBy = 3;</code>
+     * <code>optional string changedBy = 5;</code>
      */
     java.lang.String getChangedBy();
     /**
-     * <code>optional string changedBy = 3;</code>
+     * <code>optional string changedBy = 5;</code>
      */
     com.google.protobuf.ByteString
         getChangedByBytes();
+
+    // optional .WeWriteBeta.EventCarrier.EventType type = 6;
+    /**
+     * <code>optional .WeWriteBeta.EventCarrier.EventType type = 6;</code>
+     */
+    boolean hasType();
+    /**
+     * <code>optional .WeWriteBeta.EventCarrier.EventType type = 6;</code>
+     */
+    com.example.wewritebeta.MessageProtos.EventCarrier.EventType getType();
   }
   /**
-   * Protobuf type {@code WeWriteBeta.TextCarrier}
+   * Protobuf type {@code WeWriteBeta.EventCarrier}
    */
-  public static final class TextCarrier extends
+  public static final class EventCarrier extends
       com.google.protobuf.GeneratedMessage
-      implements TextCarrierOrBuilder {
-    // Use TextCarrier.newBuilder() to construct.
-    private TextCarrier(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      implements EventCarrierOrBuilder {
+    // Use EventCarrier.newBuilder() to construct.
+    private EventCarrier(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
-    private TextCarrier(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+    private EventCarrier(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-    private static final TextCarrier defaultInstance;
-    public static TextCarrier getDefaultInstance() {
+    private static final EventCarrier defaultInstance;
+    public static EventCarrier getDefaultInstance() {
       return defaultInstance;
     }
 
-    public TextCarrier getDefaultInstanceForType() {
+    public EventCarrier getDefaultInstanceForType() {
       return defaultInstance;
     }
 
@@ -84,7 +114,7 @@ public final class MessageProtos {
         getUnknownFields() {
       return this.unknownFields;
     }
-    private TextCarrier(
+    private EventCarrier(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -117,12 +147,33 @@ public final class MessageProtos {
             }
             case 16: {
               bitField0_ |= 0x00000001;
+              startIndex_ = input.readInt32();
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000002;
+              endIndex_ = input.readInt32();
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000004;
               cursorLoc_ = input.readInt32();
               break;
             }
-            case 26: {
-              bitField0_ |= 0x00000002;
+            case 42: {
+              bitField0_ |= 0x00000008;
               changedBy_ = input.readBytes();
+              break;
+            }
+            case 48: {
+              int rawValue = input.readEnum();
+              com.example.wewritebeta.MessageProtos.EventCarrier.EventType value = com.example.wewritebeta.MessageProtos.EventCarrier.EventType.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(6, rawValue);
+              } else {
+                bitField0_ |= 0x00000010;
+                type_ = value;
+              }
               break;
             }
           }
@@ -142,29 +193,120 @@ public final class MessageProtos {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.example.wewritebeta.MessageProtos.internal_static_WeWriteBeta_TextCarrier_descriptor;
+      return com.example.wewritebeta.MessageProtos.internal_static_WeWriteBeta_EventCarrier_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.example.wewritebeta.MessageProtos.internal_static_WeWriteBeta_TextCarrier_fieldAccessorTable
+      return com.example.wewritebeta.MessageProtos.internal_static_WeWriteBeta_EventCarrier_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.example.wewritebeta.MessageProtos.TextCarrier.class, com.example.wewritebeta.MessageProtos.TextCarrier.Builder.class);
+              com.example.wewritebeta.MessageProtos.EventCarrier.class, com.example.wewritebeta.MessageProtos.EventCarrier.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<TextCarrier> PARSER =
-        new com.google.protobuf.AbstractParser<TextCarrier>() {
-      public TextCarrier parsePartialFrom(
+    public static com.google.protobuf.Parser<EventCarrier> PARSER =
+        new com.google.protobuf.AbstractParser<EventCarrier>() {
+      public EventCarrier parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new TextCarrier(input, extensionRegistry);
+        return new EventCarrier(input, extensionRegistry);
       }
     };
 
     @java.lang.Override
-    public com.google.protobuf.Parser<TextCarrier> getParserForType() {
+    public com.google.protobuf.Parser<EventCarrier> getParserForType() {
       return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code WeWriteBeta.EventCarrier.EventType}
+     */
+    public enum EventType
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>TEXT = 0;</code>
+       */
+      TEXT(0, 0),
+      /**
+       * <code>UNDO = 1;</code>
+       */
+      UNDO(1, 1),
+      /**
+       * <code>REDO = 2;</code>
+       */
+      REDO(2, 2),
+      ;
+
+      /**
+       * <code>TEXT = 0;</code>
+       */
+      public static final int TEXT_VALUE = 0;
+      /**
+       * <code>UNDO = 1;</code>
+       */
+      public static final int UNDO_VALUE = 1;
+      /**
+       * <code>REDO = 2;</code>
+       */
+      public static final int REDO_VALUE = 2;
+
+
+      public final int getNumber() { return value; }
+
+      public static EventType valueOf(int value) {
+        switch (value) {
+          case 0: return TEXT;
+          case 1: return UNDO;
+          case 2: return REDO;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<EventType>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<EventType>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<EventType>() {
+              public EventType findValueByNumber(int number) {
+                return EventType.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return com.example.wewritebeta.MessageProtos.EventCarrier.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final EventType[] VALUES = values();
+
+      public static EventType valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private EventType(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:WeWriteBeta.EventCarrier.EventType)
     }
 
     private int bitField0_;
@@ -198,33 +340,65 @@ public final class MessageProtos {
       return text_.getByteString(index);
     }
 
-    // optional int32 cursorLoc = 2;
-    public static final int CURSORLOC_FIELD_NUMBER = 2;
-    private int cursorLoc_;
+    // optional int32 startIndex = 2;
+    public static final int STARTINDEX_FIELD_NUMBER = 2;
+    private int startIndex_;
     /**
-     * <code>optional int32 cursorLoc = 2;</code>
+     * <code>optional int32 startIndex = 2;</code>
      */
-    public boolean hasCursorLoc() {
+    public boolean hasStartIndex() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>optional int32 cursorLoc = 2;</code>
+     * <code>optional int32 startIndex = 2;</code>
+     */
+    public int getStartIndex() {
+      return startIndex_;
+    }
+
+    // optional int32 endIndex = 3;
+    public static final int ENDINDEX_FIELD_NUMBER = 3;
+    private int endIndex_;
+    /**
+     * <code>optional int32 endIndex = 3;</code>
+     */
+    public boolean hasEndIndex() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional int32 endIndex = 3;</code>
+     */
+    public int getEndIndex() {
+      return endIndex_;
+    }
+
+    // optional int32 cursorLoc = 4;
+    public static final int CURSORLOC_FIELD_NUMBER = 4;
+    private int cursorLoc_;
+    /**
+     * <code>optional int32 cursorLoc = 4;</code>
+     */
+    public boolean hasCursorLoc() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional int32 cursorLoc = 4;</code>
      */
     public int getCursorLoc() {
       return cursorLoc_;
     }
 
-    // optional string changedBy = 3;
-    public static final int CHANGEDBY_FIELD_NUMBER = 3;
+    // optional string changedBy = 5;
+    public static final int CHANGEDBY_FIELD_NUMBER = 5;
     private java.lang.Object changedBy_;
     /**
-     * <code>optional string changedBy = 3;</code>
+     * <code>optional string changedBy = 5;</code>
      */
     public boolean hasChangedBy() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+      return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>optional string changedBy = 3;</code>
+     * <code>optional string changedBy = 5;</code>
      */
     public java.lang.String getChangedBy() {
       java.lang.Object ref = changedBy_;
@@ -241,7 +415,7 @@ public final class MessageProtos {
       }
     }
     /**
-     * <code>optional string changedBy = 3;</code>
+     * <code>optional string changedBy = 5;</code>
      */
     public com.google.protobuf.ByteString
         getChangedByBytes() {
@@ -257,10 +431,29 @@ public final class MessageProtos {
       }
     }
 
+    // optional .WeWriteBeta.EventCarrier.EventType type = 6;
+    public static final int TYPE_FIELD_NUMBER = 6;
+    private com.example.wewritebeta.MessageProtos.EventCarrier.EventType type_;
+    /**
+     * <code>optional .WeWriteBeta.EventCarrier.EventType type = 6;</code>
+     */
+    public boolean hasType() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional .WeWriteBeta.EventCarrier.EventType type = 6;</code>
+     */
+    public com.example.wewritebeta.MessageProtos.EventCarrier.EventType getType() {
+      return type_;
+    }
+
     private void initFields() {
       text_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      startIndex_ = 0;
+      endIndex_ = 0;
       cursorLoc_ = 0;
       changedBy_ = "";
+      type_ = com.example.wewritebeta.MessageProtos.EventCarrier.EventType.TEXT;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -278,10 +471,19 @@ public final class MessageProtos {
         output.writeBytes(1, text_.getByteString(i));
       }
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(2, cursorLoc_);
+        output.writeInt32(2, startIndex_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(3, getChangedByBytes());
+        output.writeInt32(3, endIndex_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(4, cursorLoc_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(5, getChangedByBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeEnum(6, type_.getNumber());
       }
       getUnknownFields().writeTo(output);
     }
@@ -303,11 +505,23 @@ public final class MessageProtos {
       }
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, cursorLoc_);
+          .computeInt32Size(2, startIndex_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, getChangedByBytes());
+          .computeInt32Size(3, endIndex_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, cursorLoc_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(5, getChangedByBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(6, type_.getNumber());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -321,53 +535,53 @@ public final class MessageProtos {
       return super.writeReplace();
     }
 
-    public static com.example.wewritebeta.MessageProtos.TextCarrier parseFrom(
+    public static com.example.wewritebeta.MessageProtos.EventCarrier parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.example.wewritebeta.MessageProtos.TextCarrier parseFrom(
+    public static com.example.wewritebeta.MessageProtos.EventCarrier parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.example.wewritebeta.MessageProtos.TextCarrier parseFrom(byte[] data)
+    public static com.example.wewritebeta.MessageProtos.EventCarrier parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.example.wewritebeta.MessageProtos.TextCarrier parseFrom(
+    public static com.example.wewritebeta.MessageProtos.EventCarrier parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.example.wewritebeta.MessageProtos.TextCarrier parseFrom(java.io.InputStream input)
+    public static com.example.wewritebeta.MessageProtos.EventCarrier parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.example.wewritebeta.MessageProtos.TextCarrier parseFrom(
+    public static com.example.wewritebeta.MessageProtos.EventCarrier parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static com.example.wewritebeta.MessageProtos.TextCarrier parseDelimitedFrom(java.io.InputStream input)
+    public static com.example.wewritebeta.MessageProtos.EventCarrier parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static com.example.wewritebeta.MessageProtos.TextCarrier parseDelimitedFrom(
+    public static com.example.wewritebeta.MessageProtos.EventCarrier parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static com.example.wewritebeta.MessageProtos.TextCarrier parseFrom(
+    public static com.example.wewritebeta.MessageProtos.EventCarrier parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.example.wewritebeta.MessageProtos.TextCarrier parseFrom(
+    public static com.example.wewritebeta.MessageProtos.EventCarrier parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -376,7 +590,7 @@ public final class MessageProtos {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.example.wewritebeta.MessageProtos.TextCarrier prototype) {
+    public static Builder newBuilder(com.example.wewritebeta.MessageProtos.EventCarrier prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -388,24 +602,24 @@ public final class MessageProtos {
       return builder;
     }
     /**
-     * Protobuf type {@code WeWriteBeta.TextCarrier}
+     * Protobuf type {@code WeWriteBeta.EventCarrier}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.example.wewritebeta.MessageProtos.TextCarrierOrBuilder {
+       implements com.example.wewritebeta.MessageProtos.EventCarrierOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.example.wewritebeta.MessageProtos.internal_static_WeWriteBeta_TextCarrier_descriptor;
+        return com.example.wewritebeta.MessageProtos.internal_static_WeWriteBeta_EventCarrier_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.example.wewritebeta.MessageProtos.internal_static_WeWriteBeta_TextCarrier_fieldAccessorTable
+        return com.example.wewritebeta.MessageProtos.internal_static_WeWriteBeta_EventCarrier_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.example.wewritebeta.MessageProtos.TextCarrier.class, com.example.wewritebeta.MessageProtos.TextCarrier.Builder.class);
+                com.example.wewritebeta.MessageProtos.EventCarrier.class, com.example.wewritebeta.MessageProtos.EventCarrier.Builder.class);
       }
 
-      // Construct using com.example.wewritebeta.MessageProtos.TextCarrier.newBuilder()
+      // Construct using com.example.wewritebeta.MessageProtos.EventCarrier.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -427,10 +641,16 @@ public final class MessageProtos {
         super.clear();
         text_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000001);
-        cursorLoc_ = 0;
+        startIndex_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
-        changedBy_ = "";
+        endIndex_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
+        cursorLoc_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        changedBy_ = "";
+        bitField0_ = (bitField0_ & ~0x00000010);
+        type_ = com.example.wewritebeta.MessageProtos.EventCarrier.EventType.TEXT;
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -440,23 +660,23 @@ public final class MessageProtos {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.example.wewritebeta.MessageProtos.internal_static_WeWriteBeta_TextCarrier_descriptor;
+        return com.example.wewritebeta.MessageProtos.internal_static_WeWriteBeta_EventCarrier_descriptor;
       }
 
-      public com.example.wewritebeta.MessageProtos.TextCarrier getDefaultInstanceForType() {
-        return com.example.wewritebeta.MessageProtos.TextCarrier.getDefaultInstance();
+      public com.example.wewritebeta.MessageProtos.EventCarrier getDefaultInstanceForType() {
+        return com.example.wewritebeta.MessageProtos.EventCarrier.getDefaultInstance();
       }
 
-      public com.example.wewritebeta.MessageProtos.TextCarrier build() {
-        com.example.wewritebeta.MessageProtos.TextCarrier result = buildPartial();
+      public com.example.wewritebeta.MessageProtos.EventCarrier build() {
+        com.example.wewritebeta.MessageProtos.EventCarrier result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public com.example.wewritebeta.MessageProtos.TextCarrier buildPartial() {
-        com.example.wewritebeta.MessageProtos.TextCarrier result = new com.example.wewritebeta.MessageProtos.TextCarrier(this);
+      public com.example.wewritebeta.MessageProtos.EventCarrier buildPartial() {
+        com.example.wewritebeta.MessageProtos.EventCarrier result = new com.example.wewritebeta.MessageProtos.EventCarrier(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((bitField0_ & 0x00000001) == 0x00000001)) {
@@ -468,27 +688,39 @@ public final class MessageProtos {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.cursorLoc_ = cursorLoc_;
+        result.startIndex_ = startIndex_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000002;
         }
+        result.endIndex_ = endIndex_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.cursorLoc_ = cursorLoc_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000008;
+        }
         result.changedBy_ = changedBy_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.type_ = type_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.example.wewritebeta.MessageProtos.TextCarrier) {
-          return mergeFrom((com.example.wewritebeta.MessageProtos.TextCarrier)other);
+        if (other instanceof com.example.wewritebeta.MessageProtos.EventCarrier) {
+          return mergeFrom((com.example.wewritebeta.MessageProtos.EventCarrier)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.example.wewritebeta.MessageProtos.TextCarrier other) {
-        if (other == com.example.wewritebeta.MessageProtos.TextCarrier.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.example.wewritebeta.MessageProtos.EventCarrier other) {
+        if (other == com.example.wewritebeta.MessageProtos.EventCarrier.getDefaultInstance()) return this;
         if (!other.text_.isEmpty()) {
           if (text_.isEmpty()) {
             text_ = other.text_;
@@ -499,13 +731,22 @@ public final class MessageProtos {
           }
           onChanged();
         }
+        if (other.hasStartIndex()) {
+          setStartIndex(other.getStartIndex());
+        }
+        if (other.hasEndIndex()) {
+          setEndIndex(other.getEndIndex());
+        }
         if (other.hasCursorLoc()) {
           setCursorLoc(other.getCursorLoc());
         }
         if (other.hasChangedBy()) {
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000010;
           changedBy_ = other.changedBy_;
           onChanged();
+        }
+        if (other.hasType()) {
+          setType(other.getType());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -519,11 +760,11 @@ public final class MessageProtos {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.example.wewritebeta.MessageProtos.TextCarrier parsedMessage = null;
+        com.example.wewritebeta.MessageProtos.EventCarrier parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.example.wewritebeta.MessageProtos.TextCarrier) e.getUnfinishedMessage();
+          parsedMessage = (com.example.wewritebeta.MessageProtos.EventCarrier) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -627,49 +868,115 @@ public final class MessageProtos {
         return this;
       }
 
-      // optional int32 cursorLoc = 2;
-      private int cursorLoc_ ;
+      // optional int32 startIndex = 2;
+      private int startIndex_ ;
       /**
-       * <code>optional int32 cursorLoc = 2;</code>
+       * <code>optional int32 startIndex = 2;</code>
        */
-      public boolean hasCursorLoc() {
+      public boolean hasStartIndex() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>optional int32 cursorLoc = 2;</code>
+       * <code>optional int32 startIndex = 2;</code>
+       */
+      public int getStartIndex() {
+        return startIndex_;
+      }
+      /**
+       * <code>optional int32 startIndex = 2;</code>
+       */
+      public Builder setStartIndex(int value) {
+        bitField0_ |= 0x00000002;
+        startIndex_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 startIndex = 2;</code>
+       */
+      public Builder clearStartIndex() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        startIndex_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 endIndex = 3;
+      private int endIndex_ ;
+      /**
+       * <code>optional int32 endIndex = 3;</code>
+       */
+      public boolean hasEndIndex() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional int32 endIndex = 3;</code>
+       */
+      public int getEndIndex() {
+        return endIndex_;
+      }
+      /**
+       * <code>optional int32 endIndex = 3;</code>
+       */
+      public Builder setEndIndex(int value) {
+        bitField0_ |= 0x00000004;
+        endIndex_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 endIndex = 3;</code>
+       */
+      public Builder clearEndIndex() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        endIndex_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 cursorLoc = 4;
+      private int cursorLoc_ ;
+      /**
+       * <code>optional int32 cursorLoc = 4;</code>
+       */
+      public boolean hasCursorLoc() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional int32 cursorLoc = 4;</code>
        */
       public int getCursorLoc() {
         return cursorLoc_;
       }
       /**
-       * <code>optional int32 cursorLoc = 2;</code>
+       * <code>optional int32 cursorLoc = 4;</code>
        */
       public Builder setCursorLoc(int value) {
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000008;
         cursorLoc_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int32 cursorLoc = 2;</code>
+       * <code>optional int32 cursorLoc = 4;</code>
        */
       public Builder clearCursorLoc() {
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000008);
         cursorLoc_ = 0;
         onChanged();
         return this;
       }
 
-      // optional string changedBy = 3;
+      // optional string changedBy = 5;
       private java.lang.Object changedBy_ = "";
       /**
-       * <code>optional string changedBy = 3;</code>
+       * <code>optional string changedBy = 5;</code>
        */
       public boolean hasChangedBy() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>optional string changedBy = 3;</code>
+       * <code>optional string changedBy = 5;</code>
        */
       public java.lang.String getChangedBy() {
         java.lang.Object ref = changedBy_;
@@ -683,7 +990,7 @@ public final class MessageProtos {
         }
       }
       /**
-       * <code>optional string changedBy = 3;</code>
+       * <code>optional string changedBy = 5;</code>
        */
       public com.google.protobuf.ByteString
           getChangedByBytes() {
@@ -699,57 +1006,93 @@ public final class MessageProtos {
         }
       }
       /**
-       * <code>optional string changedBy = 3;</code>
+       * <code>optional string changedBy = 5;</code>
        */
       public Builder setChangedBy(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
+  bitField0_ |= 0x00000010;
         changedBy_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string changedBy = 3;</code>
+       * <code>optional string changedBy = 5;</code>
        */
       public Builder clearChangedBy() {
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000010);
         changedBy_ = getDefaultInstance().getChangedBy();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string changedBy = 3;</code>
+       * <code>optional string changedBy = 5;</code>
        */
       public Builder setChangedByBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
+  bitField0_ |= 0x00000010;
         changedBy_ = value;
         onChanged();
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:WeWriteBeta.TextCarrier)
+      // optional .WeWriteBeta.EventCarrier.EventType type = 6;
+      private com.example.wewritebeta.MessageProtos.EventCarrier.EventType type_ = com.example.wewritebeta.MessageProtos.EventCarrier.EventType.TEXT;
+      /**
+       * <code>optional .WeWriteBeta.EventCarrier.EventType type = 6;</code>
+       */
+      public boolean hasType() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional .WeWriteBeta.EventCarrier.EventType type = 6;</code>
+       */
+      public com.example.wewritebeta.MessageProtos.EventCarrier.EventType getType() {
+        return type_;
+      }
+      /**
+       * <code>optional .WeWriteBeta.EventCarrier.EventType type = 6;</code>
+       */
+      public Builder setType(com.example.wewritebeta.MessageProtos.EventCarrier.EventType value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000020;
+        type_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional .WeWriteBeta.EventCarrier.EventType type = 6;</code>
+       */
+      public Builder clearType() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        type_ = com.example.wewritebeta.MessageProtos.EventCarrier.EventType.TEXT;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:WeWriteBeta.EventCarrier)
     }
 
     static {
-      defaultInstance = new TextCarrier(true);
+      defaultInstance = new EventCarrier(true);
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:WeWriteBeta.TextCarrier)
+    // @@protoc_insertion_point(class_scope:WeWriteBeta.EventCarrier)
   }
 
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_WeWriteBeta_TextCarrier_descriptor;
+    internal_static_WeWriteBeta_EventCarrier_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_WeWriteBeta_TextCarrier_fieldAccessorTable;
+      internal_static_WeWriteBeta_EventCarrier_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -759,22 +1102,25 @@ public final class MessageProtos {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\rWeWrite.proto\022\013WeWriteBeta\"A\n\013TextCarr" +
-      "ier\022\014\n\004text\030\001 \003(\t\022\021\n\tcursorLoc\030\002 \001(\005\022\021\n\t" +
-      "changedBy\030\003 \001(\tB(\n\027com.example.wewritebe" +
-      "taB\rMessageProtos"
+      "\n\rWeWrite.proto\022\013WeWriteBeta\"\306\001\n\014EventCa" +
+      "rrier\022\014\n\004text\030\001 \003(\t\022\022\n\nstartIndex\030\002 \001(\005\022" +
+      "\020\n\010endIndex\030\003 \001(\005\022\021\n\tcursorLoc\030\004 \001(\005\022\021\n\t" +
+      "changedBy\030\005 \001(\t\0221\n\004type\030\006 \001(\0162#.WeWriteB" +
+      "eta.EventCarrier.EventType\")\n\tEventType\022" +
+      "\010\n\004TEXT\020\000\022\010\n\004UNDO\020\001\022\010\n\004REDO\020\002B(\n\027com.exa" +
+      "mple.wewritebetaB\rMessageProtos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
         public com.google.protobuf.ExtensionRegistry assignDescriptors(
             com.google.protobuf.Descriptors.FileDescriptor root) {
           descriptor = root;
-          internal_static_WeWriteBeta_TextCarrier_descriptor =
+          internal_static_WeWriteBeta_EventCarrier_descriptor =
             getDescriptor().getMessageTypes().get(0);
-          internal_static_WeWriteBeta_TextCarrier_fieldAccessorTable = new
+          internal_static_WeWriteBeta_EventCarrier_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_WeWriteBeta_TextCarrier_descriptor,
-              new java.lang.String[] { "Text", "CursorLoc", "ChangedBy", });
+              internal_static_WeWriteBeta_EventCarrier_descriptor,
+              new java.lang.String[] { "Text", "StartIndex", "EndIndex", "CursorLoc", "ChangedBy", "Type", });
           return null;
         }
       };

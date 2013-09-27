@@ -3,10 +3,20 @@ package WeWriteBeta;
 option java_package = "com.example.wewritebeta";
 option java_outer_classname = "MessageProtos";
 
-message TextCarrier {
+message EventCarrier {
   repeated string text = 1;
-  optional int32 cursorLoc = 2;
-  optional string changedBy = 3;
-
+  optional int32 startIndex = 2;
+  optional int32 endIndex = 3;
+  optional int32 cursorLoc = 4;
+  optional string changedBy = 5;
+  
+  enum EventType
+  {
+  	TEXT = 0;
+  	UNDO = 1;
+  	REDO = 2;
+  }
+  
+  optional EventType type = 6;
 
 }
