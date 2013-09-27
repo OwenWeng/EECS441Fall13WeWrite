@@ -1,5 +1,7 @@
 # cache for current jar dependency. DO NOT EDIT.
 # format is <lastModified> <length> <SHA-1> <path>
 # Encoding is UTF-8
-1378796577000 556198 4a6be13368bb64c5a0b0460632d228a1a915f58f /Users/mattbaumgartner/Documents/Programming/Git Clones/imlc-android-common/libs/android-support-v4.jar
-1380172810000 556198 4a6be13368bb64c5a0b0460632d228a1a915f58f /Users/mattbaumgartner/git/EECS441Fall13WeWrite/libs/android-support-v4.jar
+1378861682000 2189117 69e12f4c6aeac392555f1ea86fab82b5e5e31ad4 /Users/Owen/git/collabrify-client-android/libs/guava-14.0.1.jar
+1378860979000 2189117 69e12f4c6aeac392555f1ea86fab82b5e5e31ad4 /Users/Owen/git/imlc-common/lib/guava-14.0.1.jar
+1378861360000 556198 4a6be13368bb64c5a0b0460632d228a1a915f58f /Users/Owen/git/imlc-android-common/libs/android-support-v4.jar
+1380263459000 556198 4a6be13368bb64c5a0b0460632d228a1a915f58f /Users/Owen/git/EECS441Fall13WeWrite/libs/android-support-v4.jar

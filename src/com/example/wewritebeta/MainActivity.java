@@ -18,9 +18,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import edu.umich.imlc.collabrify.client.CollabrifyClient;
 import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
-//Change
-//Change
-//Change
+//test
+
+
 public class MainActivity extends Activity {
 
   // variables for layout
