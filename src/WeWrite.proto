@@ -4,7 +4,7 @@ option java_package = "com.example.wewritebeta";
 option java_outer_classname = "MessageProtos";
 
 message EventCarrier {
-  repeated string text = 1;
+  optional string text = 1;
   optional int32 startIndex = 2;
   optional int32 endIndex = 3;
   optional int32 cursorLoc = 4;

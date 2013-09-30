@@ -11,25 +11,20 @@ public final class MessageProtos {
   public interface EventCarrierOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // repeated string text = 1;
+    // optional string text = 1;
     /**
-     * <code>repeated string text = 1;</code>
+     * <code>optional string text = 1;</code>
      */
-    java.util.List<java.lang.String>
-    getTextList();
+    boolean hasText();
     /**
-     * <code>repeated string text = 1;</code>
+     * <code>optional string text = 1;</code>
      */
-    int getTextCount();
+    java.lang.String getText();
     /**
-     * <code>repeated string text = 1;</code>
-     */
-    java.lang.String getText(int index);
-    /**
-     * <code>repeated string text = 1;</code>
+     * <code>optional string text = 1;</code>
      */
     com.google.protobuf.ByteString
-        getTextBytes(int index);
+        getTextBytes();
 
     // optional int32 startIndex = 2;
     /**
@@ -138,30 +133,27 @@ public final class MessageProtos {
               break;
             }
             case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                text_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              text_.add(input.readBytes());
+              bitField0_ |= 0x00000001;
+              text_ = input.readBytes();
               break;
             }
             case 16: {
-              bitField0_ |= 0x00000001;
+              bitField0_ |= 0x00000002;
               startIndex_ = input.readInt32();
               break;
             }
             case 24: {
-              bitField0_ |= 0x00000002;
+              bitField0_ |= 0x00000004;
               endIndex_ = input.readInt32();
               break;
             }
             case 32: {
-              bitField0_ |= 0x00000004;
+              bitField0_ |= 0x00000008;
               cursorLoc_ = input.readInt32();
               break;
             }
             case 42: {
-              bitField0_ |= 0x00000008;
+              bitField0_ |= 0x00000010;
               changedBy_ = input.readBytes();
               break;
             }
@@ -171,7 +163,7 @@ public final class MessageProtos {
               if (value == null) {
                 unknownFields.mergeVarintField(6, rawValue);
               } else {
-                bitField0_ |= 0x00000010;
+                bitField0_ |= 0x00000020;
                 type_ = value;
               }
               break;
@@ -184,9 +176,6 @@ public final class MessageProtos {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          text_ = new com.google.protobuf.UnmodifiableLazyStringList(text_);
-        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -310,34 +299,47 @@ public final class MessageProtos {
     }
 
     private int bitField0_;
-    // repeated string text = 1;
+    // optional string text = 1;
     public static final int TEXT_FIELD_NUMBER = 1;
-    private com.google.protobuf.LazyStringList text_;
+    private java.lang.Object text_;
     /**
-     * <code>repeated string text = 1;</code>
+     * <code>optional string text = 1;</code>
      */
-    public java.util.List<java.lang.String>
-        getTextList() {
-      return text_;
+    public boolean hasText() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>repeated string text = 1;</code>
+     * <code>optional string text = 1;</code>
      */
-    public int getTextCount() {
-      return text_.size();
+    public java.lang.String getText() {
+      java.lang.Object ref = text_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          text_ = s;
+        }
+        return s;
+      }
     }
     /**
-     * <code>repeated string text = 1;</code>
-     */
-    public java.lang.String getText(int index) {
-      return text_.get(index);
-    }
-    /**
-     * <code>repeated string text = 1;</code>
+     * <code>optional string text = 1;</code>
      */
     public com.google.protobuf.ByteString
-        getTextBytes(int index) {
-      return text_.getByteString(index);
+        getTextBytes() {
+      java.lang.Object ref = text_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        text_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     // optional int32 startIndex = 2;
@@ -347,7 +349,7 @@ public final class MessageProtos {
      * <code>optional int32 startIndex = 2;</code>
      */
     public boolean hasStartIndex() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
+      return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
      * <code>optional int32 startIndex = 2;</code>
@@ -363,7 +365,7 @@ public final class MessageProtos {
      * <code>optional int32 endIndex = 3;</code>
      */
     public boolean hasEndIndex() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
      * <code>optional int32 endIndex = 3;</code>
@@ -379,7 +381,7 @@ public final class MessageProtos {
      * <code>optional int32 cursorLoc = 4;</code>
      */
     public boolean hasCursorLoc() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+      return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
      * <code>optional int32 cursorLoc = 4;</code>
@@ -395,7 +397,7 @@ public final class MessageProtos {
      * <code>optional string changedBy = 5;</code>
      */
     public boolean hasChangedBy() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
      * <code>optional string changedBy = 5;</code>
@@ -438,7 +440,7 @@ public final class MessageProtos {
      * <code>optional .WeWriteBeta.EventCarrier.EventType type = 6;</code>
      */
     public boolean hasType() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
+      return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
      * <code>optional .WeWriteBeta.EventCarrier.EventType type = 6;</code>
@@ -448,7 +450,7 @@ public final class MessageProtos {
     }
 
     private void initFields() {
-      text_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      text_ = "";
       startIndex_ = 0;
       endIndex_ = 0;
       cursorLoc_ = 0;
@@ -467,22 +469,22 @@ public final class MessageProtos {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      for (int i = 0; i < text_.size(); i++) {
-        output.writeBytes(1, text_.getByteString(i));
-      }
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(2, startIndex_);
+        output.writeBytes(1, getTextBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(3, endIndex_);
+        output.writeInt32(2, startIndex_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(4, cursorLoc_);
+        output.writeInt32(3, endIndex_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(5, getChangedByBytes());
+        output.writeInt32(4, cursorLoc_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBytes(5, getChangedByBytes());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeEnum(6, type_.getNumber());
       }
       getUnknownFields().writeTo(output);
@@ -494,32 +496,27 @@ public final class MessageProtos {
       if (size != -1) return size;
 
       size = 0;
-      {
-        int dataSize = 0;
-        for (int i = 0; i < text_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeBytesSizeNoTag(text_.getByteString(i));
-        }
-        size += dataSize;
-        size += 1 * getTextList().size();
-      }
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, startIndex_);
+          .computeBytesSize(1, getTextBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, endIndex_);
+          .computeInt32Size(2, startIndex_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(4, cursorLoc_);
+          .computeInt32Size(3, endIndex_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, getChangedByBytes());
+          .computeInt32Size(4, cursorLoc_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(5, getChangedByBytes());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(6, type_.getNumber());
       }
@@ -639,7 +636,7 @@ public final class MessageProtos {
 
       public Builder clear() {
         super.clear();
-        text_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        text_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
         startIndex_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -679,30 +676,28 @@ public final class MessageProtos {
         com.example.wewritebeta.MessageProtos.EventCarrier result = new com.example.wewritebeta.MessageProtos.EventCarrier(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
-        if (((bitField0_ & 0x00000001) == 0x00000001)) {
-          text_ = new com.google.protobuf.UnmodifiableLazyStringList(
-              text_);
-          bitField0_ = (bitField0_ & ~0x00000001);
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
         result.text_ = text_;
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000001;
+          to_bitField0_ |= 0x00000002;
         }
         result.startIndex_ = startIndex_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000002;
+          to_bitField0_ |= 0x00000004;
         }
         result.endIndex_ = endIndex_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000004;
+          to_bitField0_ |= 0x00000008;
         }
         result.cursorLoc_ = cursorLoc_;
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000008;
+          to_bitField0_ |= 0x00000010;
         }
         result.changedBy_ = changedBy_;
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000010;
+          to_bitField0_ |= 0x00000020;
         }
         result.type_ = type_;
         result.bitField0_ = to_bitField0_;
@@ -721,14 +716,9 @@ public final class MessageProtos {
 
       public Builder mergeFrom(com.example.wewritebeta.MessageProtos.EventCarrier other) {
         if (other == com.example.wewritebeta.MessageProtos.EventCarrier.getDefaultInstance()) return this;
-        if (!other.text_.isEmpty()) {
-          if (text_.isEmpty()) {
-            text_ = other.text_;
-            bitField0_ = (bitField0_ & ~0x00000001);
-          } else {
-            ensureTextIsMutable();
-            text_.addAll(other.text_);
-          }
+        if (other.hasText()) {
+          bitField0_ |= 0x00000001;
+          text_ = other.text_;
           onChanged();
         }
         if (other.hasStartIndex()) {
@@ -775,95 +765,76 @@ public final class MessageProtos {
       }
       private int bitField0_;
 
-      // repeated string text = 1;
-      private com.google.protobuf.LazyStringList text_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      private void ensureTextIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          text_ = new com.google.protobuf.LazyStringArrayList(text_);
-          bitField0_ |= 0x00000001;
-         }
-      }
+      // optional string text = 1;
+      private java.lang.Object text_ = "";
       /**
-       * <code>repeated string text = 1;</code>
+       * <code>optional string text = 1;</code>
        */
-      public java.util.List<java.lang.String>
-          getTextList() {
-        return java.util.Collections.unmodifiableList(text_);
+      public boolean hasText() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>repeated string text = 1;</code>
+       * <code>optional string text = 1;</code>
        */
-      public int getTextCount() {
-        return text_.size();
+      public java.lang.String getText() {
+        java.lang.Object ref = text_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          text_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
-       * <code>repeated string text = 1;</code>
-       */
-      public java.lang.String getText(int index) {
-        return text_.get(index);
-      }
-      /**
-       * <code>repeated string text = 1;</code>
+       * <code>optional string text = 1;</code>
        */
       public com.google.protobuf.ByteString
-          getTextBytes(int index) {
-        return text_.getByteString(index);
+          getTextBytes() {
+        java.lang.Object ref = text_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          text_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
       }
       /**
-       * <code>repeated string text = 1;</code>
+       * <code>optional string text = 1;</code>
        */
       public Builder setText(
-          int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureTextIsMutable();
-        text_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string text = 1;</code>
-       */
-      public Builder addText(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  ensureTextIsMutable();
-        text_.add(value);
+  bitField0_ |= 0x00000001;
+        text_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>repeated string text = 1;</code>
-       */
-      public Builder addAllText(
-          java.lang.Iterable<java.lang.String> values) {
-        ensureTextIsMutable();
-        super.addAll(values, text_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string text = 1;</code>
+       * <code>optional string text = 1;</code>
        */
       public Builder clearText() {
-        text_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000001);
+        text_ = getDefaultInstance().getText();
         onChanged();
         return this;
       }
       /**
-       * <code>repeated string text = 1;</code>
+       * <code>optional string text = 1;</code>
        */
-      public Builder addTextBytes(
+      public Builder setTextBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  ensureTextIsMutable();
-        text_.add(value);
+  bitField0_ |= 0x00000001;
+        text_ = value;
         onChanged();
         return this;
       }
@@ -1103,7 +1074,7 @@ public final class MessageProtos {
   static {
     java.lang.String[] descriptorData = {
       "\n\rWeWrite.proto\022\013WeWriteBeta\"\314\001\n\014EventCa" +
-      "rrier\022\014\n\004text\030\001 \003(\t\022\022\n\nstartIndex\030\002 \001(\005\022" +
+      "rrier\022\014\n\004text\030\001 \001(\t\022\022\n\nstartIndex\030\002 \001(\005\022" +
       "\020\n\010endIndex\030\003 \001(\005\022\021\n\tcursorLoc\030\004 \001(\005\022\021\n\t" +
       "changedBy\030\005 \001(\t\0221\n\004type\030\006 \001(\0162#.WeWriteB" +
       "eta.EventCarrier.EventType\"/\n\tEventType\022" +

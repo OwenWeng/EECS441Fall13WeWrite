@@ -1,5 +1,9 @@
 package com.example.wewritebeta;
 
+
+import android.util.Log;
+
+
 import com.example.wewritebeta.MessageProtos.EventCarrier;
 import com.google.protobuf.InvalidProtocolBufferException;
 
@@ -12,29 +16,44 @@ public class Event{
   private int startIndex;
   private int endIndex;
   private CharSequence text;
+  private CharSequence wholeText;
   private int cursorLoc;
   private int bufferStringCount;
+  private ChangeType type;
   private EventCarrier.Builder carrierBuilder = EventCarrier.newBuilder();
   private EventCarrier eCarry;
   
-  private void setEventCarryPriv()
+  
+  public enum ChangeType
   {
+    INSERT(0),
+    DELETE(1),
+    CURSORMOVE(2);
+    private int value;
+    private ChangeType(int value) 
+    {
+      this.value = value;
+    }
+    public int getValue() 
+    {
+      return value;
+    }
+  }
+ 
+  
+  
+  public Event(CharSequence change, CharSequence whole, 
+      int begin, int end, int cursorPos, ChangeType cType)
+  {
+    startIndex = begin;
+    endIndex = end; 
+    cursorLoc = cursorPos;
+    type = cType;
+    text = change;
+    wholeText = whole;
     carrierBuilder.setStartIndex(startIndex);
     carrierBuilder.setEndIndex(endIndex);
-    carrierBuilder.setText(bufferStringCount, text.toString());
-    eCarry = carrierBuilder.build();
-    
-  }
-  
-  public Event(int sIndex, int eIndex, CharSequence tex)
-  {
-    startIndex = sIndex;
-    endIndex = eIndex;
-    text = tex;
-    bufferStringCount = 0;
-    carrierBuilder.setStartIndex(sIndex);
-    carrierBuilder.setEndIndex(eIndex);
-    carrierBuilder.setText(bufferStringCount, text.toString());
+    carrierBuilder.setText(text.toString());
   }
   
   public Event(byte[] by )
@@ -52,12 +71,24 @@ public class Event{
   {
     return eCarry.toByteArray();
   }
-  
-  public void setVariables(int sIndex, int eIndex, CharSequence tex)
+  public ChangeType getType()
   {
-    startIndex = sIndex;
-    endIndex = eIndex;
-    text = tex;
+    return type;
   }
-  
+  public int getStart()
+  {
+    return startIndex;
+  }
+  public int getEnd()
+  {
+    return endIndex;
+  }
+  public CharSequence getMessage()
+  {
+    return text;
+  }
+  public int getCursor()
+  {
+    return cursorLoc;
+  }
 }

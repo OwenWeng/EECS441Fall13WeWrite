@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Stack;
 
+import com.example.wewritebeta.Event.ChangeType;
+
+
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,11 +22,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import edu.umich.imlc.collabrify.client.CollabrifyClient;
 import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
-//Change
-//Change
-//Change
-//change 
-//change
+
 public class MainActivity extends Activity {
 
   // variables for layout
@@ -41,13 +41,14 @@ public class MainActivity extends Activity {
   public ByteArrayOutputStream baseFileReceiveBuffer;
   public String broadcastedText;
   
-  // variables for undo/redo  
-  public static boolean ButtonChanged = false;
-  Stack<CharSequence> undoStack = new Stack<CharSequence>();
-  Stack<CharSequence> redoStack = new Stack<CharSequence>();
+  //listener variables
+  public Listener listen;
+  public boolean suppress;
+  public EditTextCursorWatcher messageText;
   
   @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  protected void onCreate(Bundle savedInstanceState) 
+  {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     
@@ -55,6 +56,12 @@ public class MainActivity extends Activity {
     joinSeesionButton = (Button) findViewById(R.id.joinSessionButton);
     leaveSessionButton = (Button) findViewById(R.id.leaveSessionButton);
     baseFile = (CheckBox) findViewById(R.id.baseFile);
+    
+    //instantiate listener and EditTextCursorWatcher
+    listen = new Listener(this);
+    messageText = (EditTextCursorWatcher) findViewById(R.id.edit_message);
+    messageText.setMainActivity(this);
+    suppress = false;
     
     tags.add("test");
     
@@ -78,129 +85,68 @@ public class MainActivity extends Activity {
     
     
     
-    TextListener();
   }
 
 
   @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
+  public boolean onCreateOptionsMenu(Menu menu) 
+  {
     // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.main, menu);
     return true;
   }
   
-  @Override
+  /*@Override
   public boolean onOptionsItemSelected(MenuItem item) 
   {
-      CharSequence replaceText;
-      EditText currentText = (EditText) findViewById(R.id.edit_message);
-      switch (item.getItemId()) 
-      {
-        
-      case R.id.action_undo:
-        if(undoStack.empty())
-        {
-          Log.d("empty undo", "The undo stack is empty");
-        }
-        else
-        {
-          ButtonChanged = true;
-          replaceText = undoStack.pop();
-          
-          Log.d("Replacement Text", replaceText.toString()); //GET RID OF THIS
-          
-          redoStack.push(currentText.getText());
-          currentText.setText(replaceText);
-          currentText.setSelection(replaceText.length());
-        }
-        return true;
-      case R.id.action_redo:
-        if(redoStack.empty())
-        {
-          Log.d("empty redo", "The redo stack is empty");
-        }
-        else
-        {
-          ButtonChanged = true;
-          replaceText = redoStack.pop();
-          undoStack.push(currentText.getText());
-          currentText.setText(replaceText);
-          currentText.setSelection(replaceText.length());
-        }
-        return true;
-        
-      default:
-          return super.onOptionsItemSelected(item);
-      }
-           
-     
-  }
-  
-  public void TextListener()
+    
+  }*/
+  public void generateEvent(CharSequence changeText, CharSequence wholeText, 
+      int begin, int end, int cursorPos, ChangeType type) //return type Event
   {
     
-    EditText messageText = (EditText) findViewById(R.id.edit_message);
-    messageText.addTextChangedListener(new TextWatcher() 
-    {
-      
-      boolean dontPush = false;
-      private Calendar startingTime = Calendar.getInstance();
-      
-      private CharSequence toBePushed = ""; 
-      /* toBePushed holds the text that will be added to the undo stack next. This is so that we do not pop the most 
-       * recently added text. Think about setting this to initial message text to avoid issues when opening 
-       * a file. */
-      
-      public void afterTextChanged(Editable s) 
-      {
-      }
-      
-      public void beforeTextChanged(CharSequence s, int start, 
-        int count, int after) 
-      {
-      }
-      
-      @Override 
-      public void onTextChanged(CharSequence s, int start, 
-          int before, int count)
-      {
-        if(ButtonChanged == true)
-        {
-          ButtonChanged = false; 
-          dontPush = true;
-        }
-        else
-        {
-          
-          Calendar cal = Calendar.getInstance();
-          
-          long timerInMilli = cal.getTimeInMillis();
-          long startInMilli = startingTime.getTimeInMillis();
-          
-         
-          if( timerInMilli - startInMilli > 5000 ) //Define Constant MILLISECONDs = 1000 and do 1*MILLISECONDS
-          {
-            if(!dontPush)
-            {
-            undoStack.push(toBePushed.toString());
-            }
-            dontPush = false;
-            Log.d("Adding to undo:", toBePushed.toString());
-            toBePushed = s;
-            startingTime.setTimeInMillis(timerInMilli);  
-            
-          }
-        }
-        
-      
-         
-        
-        
-      }
-
-    });
+    Event event = new Event(changeText, wholeText, 
+        begin, end, cursorPos, type);
   }
-
+  
+  public void applyEvent(Event e)
+  {
+    int start = e.getStart();
+    int end = e.getEnd();
+    CharSequence newText = e.getMessage();
+    
+    Editable textHolder1, textHolder2; //for manipulating strings;
+    suppress = true;
+    if(e.getType() == Event.ChangeType.CURSORMOVE)
+    {
+      messageText.setSelection(e.getCursor());
+    }
+    else if(e.getType() == Event.ChangeType.INSERT)
+    {
+      try
+      {
+        textHolder1 = messageText.getText();
+        textHolder1.insert(start, newText);
+      }
+      catch(Exception ex)
+      {
+        Log.d("Insert Error", ex.getMessage());
+      }
+    }
+    else if(e.getType() == Event.ChangeType.DELETE)
+    {
+      try
+      {
+        textHolder1 = messageText.getText();
+        textHolder1.delete(end, start);
+        
+      }
+      catch(Exception ex)
+      {
+        Log.d("Delete Error", ex.getMessage());
+      }
+    
+    }
+  }
 }
-
 
