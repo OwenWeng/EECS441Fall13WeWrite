@@ -22,6 +22,7 @@ public class Event{
   private ChangeType type;
   private EventCarrier.Builder carrierBuilder = EventCarrier.newBuilder();
   private EventCarrier eCarry;
+  private long subID;
   
   
   public enum ChangeType
@@ -122,5 +123,9 @@ public class Event{
   public int getCursor()
   {
     return cursorLoc;
+  }
+  public void setSubID(long ID)
+  {
+    subID = ID;
   }
 }

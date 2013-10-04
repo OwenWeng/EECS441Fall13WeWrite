@@ -3,23 +3,19 @@ package com.example.wewritebeta;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Stack;
-
-import com.example.wewritebeta.Event.ChangeType;
-
-
+import java.util.Queue;
+import java.util.Vector;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
+
+import com.example.wewritebeta.Event.ChangeType;
+
 import edu.umich.imlc.collabrify.client.CollabrifyClient;
 import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
 
@@ -45,6 +41,13 @@ public class MainActivity extends Activity {
   public Listener listen;
   public boolean suppress;
   public EditTextCursorWatcher messageText;
+  
+  //Global and local queue/stacks
+  public CharSequence storeSavedGlobalState;
+  public Vector<Event> totalGlobalEventState;
+  public Queue<Event> localChanges;
+  public Queue<Event> tempGlobalEvent;
+  
   
   @Override
   protected void onCreate(Bundle savedInstanceState) 
@@ -197,6 +200,11 @@ public class MainActivity extends Activity {
     
     }
     listen.unsuppress();
+    
+  }
+  
+  public void receivedEvent(long glob, int sub, Event ev)
+  {
     
   }
 }

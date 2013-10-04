@@ -5,9 +5,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.util.Log;
+import edu.umich.imlc.android.common.Utils;
 import edu.umich.imlc.collabrify.client.CollabrifyAdapter;
 import edu.umich.imlc.collabrify.client.CollabrifyClient;
 import edu.umich.imlc.collabrify.client.CollabrifySession;
@@ -165,6 +168,27 @@ public class WeWriteCollabrifyAdapter extends CollabrifyAdapter
       @Override
       public void run() {
         a.createSessionButton.setText("Create");
+      }
+    });
+  }
+  
+  @Override
+  public void onReceiveEvent(final long orderId, int subId, String eventType,
+      final byte[] data) 
+  {
+    Utils.printMethodName(a.TAG);
+    Log.d(a.TAG, "RECEIVED SUB ID:" + subId);
+
+    
+    Event event = new Event(data);
+    
+    a.receivedEvent(orderId, subId, event);
+    
+    a.runOnUiThread(new Runnable() {
+      @Override
+      public void run() {
+        Utils.printMethodName(a.TAG);
+        
       }
     });
   }
