@@ -50,13 +50,7 @@ public class MainActivity extends Activity {
   protected void onCreate(Bundle savedInstanceState) 
   {
     
-    CharSequence testText = "AAA BBB CCC";
-    Event testEvent = new Event(testText, "", 
-        0, 11, 11, Event.ChangeType.INSERT);
-    applyEvent(testEvent);
-    testEvent = new Event(testText, "", 
-        9, 5, 11, Event.ChangeType.DELETE);
-    applyEvent(testEvent);
+    
     
     
     
@@ -79,7 +73,7 @@ public class MainActivity extends Activity {
     messageText.setMainActivity(this);
     suppress = false;
     
-    tags.add("test");
+    tags.add("team23");
     
     // Instantiate client object
     boolean getLatestEvent = false;
@@ -123,6 +117,14 @@ public class MainActivity extends Activity {
     
     Event event = new Event(changeText, wholeText, 
         begin, end, cursorPos, type);
+    try
+    {
+      myClient.broadcast(event.serializeEvent(), "extra message");
+    }
+    catch(CollabrifyException e)
+    {
+      Log.e("Collabrify Exception", e.getMessage());
+    }
   }
   
   public void applyEvent(Event e)
@@ -151,7 +153,7 @@ public class MainActivity extends Activity {
         }
         catch(Exception ex)
         {
-          Log.d("Insert Error", ex.getMessage());
+          Log.e("Insert Error", ex.getMessage());
         }
       }
       else
@@ -162,7 +164,7 @@ public class MainActivity extends Activity {
         }
         catch(Exception ex)
         {
-          Log.d("Insert Error", ex.getMessage());
+          Log.e("Insert Error", ex.getMessage());
         }
       }
       messageText.setText(currentText);
@@ -189,7 +191,7 @@ public class MainActivity extends Activity {
         }
         catch(Exception ex)
         {
-          Log.d("Delete Error", ex.getMessage());
+          Log.e("Delete Error", ex.getMessage());
         }
       }
     

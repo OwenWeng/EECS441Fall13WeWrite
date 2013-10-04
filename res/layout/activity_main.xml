@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <com.example.WeWriteBeta.EditTextCursorWatcher
+    <com.example.wewritebeta.EditTextCursorWatcher
      android:id="@+id/edit_message"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
