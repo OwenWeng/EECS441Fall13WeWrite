@@ -1,4 +1,4 @@
-package WeWriteBeta;
+package WeWriteBeta
 
 option java_package = "com.example.wewritebeta";
 option java_outer_classname = "MessageProtos";
@@ -15,6 +15,8 @@ message EventCarrier {
   	INSERT = 0;
   	DELETE = 1;
   	CURSOR = 2;
+  	UNDO = 3;
+  	REDO = 4;
   }
   
   optional EventType type = 6;

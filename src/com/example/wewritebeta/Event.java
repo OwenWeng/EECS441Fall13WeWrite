@@ -28,7 +28,9 @@ public class Event{
   {
     INSERT(0),
     DELETE(1),
-    CURSORMOVE(2);
+    CURSORMOVE(2),
+    UNDO(3),
+    REDO(4);
     private int value;
     private ChangeType(int value) 
     {
@@ -54,6 +56,17 @@ public class Event{
     carrierBuilder.setStartIndex(startIndex);
     carrierBuilder.setEndIndex(endIndex);
     carrierBuilder.setText(text.toString());
+    
+    switch(type)  //TODO add UNDO and REDO
+    {
+      case INSERT:
+        carrierBuilder.setType(EventCarrier.EventType.INSERT);
+        break;
+      case DELETE:
+        carrierBuilder.setType(EventCarrier.EventType.DELETE);
+        break;
+    }
+    
   }
   
   public Event(byte[] by )
@@ -63,6 +76,7 @@ public class Event{
       eCarry.parseFrom(by);
     }
    catch(InvalidProtocolBufferException e){}
+    
  }
     
   public Event(){}

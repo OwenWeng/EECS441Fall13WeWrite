@@ -18,11 +18,15 @@ public class Listener
   private boolean cursorChange;
   private Handler timer; 
   private Runnable runEventGen; 
+  private boolean suppress;
+  private int timerLength;
   public Listener(MainActivity main)
   {
     m = main;
     
     begin = true;
+    suppress = true;
+    timerLength = 5000;
     messageText = (EditTextCursorWatcher) m.findViewById(R.id.edit_message);
     instantiateListener();
     timer = new Handler();
@@ -35,14 +39,13 @@ public class Listener
          flush();
       }
    };
-   timer.postDelayed(runEventGen, 10000);
+   timer.postDelayed(runEventGen, timerLength);
   }
   
     private void instantiateListener()
     {
       messageText.addTextChangedListener(new TextWatcher() 
       {
-
         public void afterTextChanged(Editable s) 
         {
         }
@@ -51,10 +54,12 @@ public class Listener
         public void beforeTextChanged(CharSequence s, int start, 
             int count, int after) 
         {
-          
-          if((cursor - startIndex) < 0 && after > 0 && !begin)
+          if(!suppress)
           {
-            flush();
+            if((cursor - startIndex) < 0 && after > 0 && !begin)
+            {
+              flush();
+            }
           }
         }
 
@@ -62,28 +67,30 @@ public class Listener
         public void onTextChanged(CharSequence s, int start, 
             int before, int count)
         {
-          if(begin)
+          if(!suppress)
           {
-            
-            startIndex = start + before;
-            begin = false;
-            cursor = startIndex;
-          }
-          wholeText = s;
-          cursorChange = true;
-          
-          //want to allow inserts followed by deletes but not deletes followed by inserts
-          
+            if(begin)
+            {
+
+              startIndex = start + before;
+              begin = false;
+              cursor = startIndex;
+            }
+            wholeText = s;
+            cursorChange = true;
+
+            //want to allow inserts followed by deletes but not deletes followed by inserts
+
             cursor+= (count - before);
-          
 
 
-          textString = "start" + Integer.toString(start) + "before" + Integer.toString(before) 
-              + "count" + Integer.toString(count);
-          Log.d("onTextChangeStuff", textString.toString());
-          Log.d("onTextChangeText", s.toString());
 
+            textString = "start" + Integer.toString(start) + "before" + Integer.toString(before) 
+                + "count" + Integer.toString(count);
+            Log.d("onTextChangeStuff", textString.toString());
+            Log.d("onTextChangeText", s.toString());
 
+          }
         }
       });
     }
@@ -102,7 +109,7 @@ public class Listener
       }
       cursor = startIndex;
       begin = true;
-      timer.postDelayed(runEventGen, 5000);
+      timer.postDelayed(runEventGen, timerLength);
     }
     private void eventGen()
     {
@@ -124,6 +131,14 @@ public class Listener
     {
       cursorChange = false;
     }
-    
-    
+    public void suppress()
+    {
+      suppress = true;
+      timer.removeCallbacks(runEventGen);
+    }
+    public void unsuppress()
+    {
+      suppress = false; 
+      timer.postDelayed(runEventGen, timerLength);
+    }
 }

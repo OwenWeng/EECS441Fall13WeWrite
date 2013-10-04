@@ -70,14 +70,7 @@ public class EditTextCursorWatcher extends EditText {
          m.listen.resetCursorChange();
          previousPosition = selStart;
        }
-       else
-       {
-         if(selEnd != previousPosition)
-         {
-           m.listen.flush();
-           m.generateEvent("", this.getText().toString(), previousPosition, selEnd, selEnd, Event.ChangeType.CURSORMOVE);
-         }
-       }
+       
      }
    }
 

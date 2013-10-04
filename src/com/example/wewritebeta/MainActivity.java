@@ -49,6 +49,21 @@ public class MainActivity extends Activity {
   @Override
   protected void onCreate(Bundle savedInstanceState) 
   {
+    
+    CharSequence testText = "AAA BBB CCC";
+    Event testEvent = new Event(testText, "", 
+        0, 11, 11, Event.ChangeType.INSERT);
+    applyEvent(testEvent);
+    testEvent = new Event(testText, "", 
+        9, 5, 11, Event.ChangeType.DELETE);
+    applyEvent(testEvent);
+    
+    
+    
+    
+    
+    
+    
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     
@@ -59,6 +74,7 @@ public class MainActivity extends Activity {
     
     //instantiate listener and EditTextCursorWatcher
     listen = new Listener(this);
+    listen.unsuppress();
     messageText = (EditTextCursorWatcher) findViewById(R.id.edit_message);
     messageText.setMainActivity(this);
     suppress = false;
@@ -80,14 +96,9 @@ public class MainActivity extends Activity {
     
     createSessionButton.setOnClickListener(new CreateListener(this));
     joinSeesionButton.setOnClickListener(new JoinListener(this)); 
-    leaveSessionButton.setOnClickListener(new LeaveListener(this));
-    
-    
-    
-    
+    leaveSessionButton.setOnClickListener(new LeaveListener(this)); 
   }
-
-
+  
   @Override
   public boolean onCreateOptionsMenu(Menu menu) 
   {
@@ -99,8 +110,13 @@ public class MainActivity extends Activity {
   /*@Override
   public boolean onOptionsItemSelected(MenuItem item) 
   {
+    switch(item.getItemId())
+    {
+      case R.id.action_undo:
+    }
     
   }*/
+  
   public void generateEvent(CharSequence changeText, CharSequence wholeText, 
       int begin, int end, int cursorPos, ChangeType type) //return type Event
   {
@@ -113,40 +129,73 @@ public class MainActivity extends Activity {
   {
     int start = e.getStart();
     int end = e.getEnd();
+    int deletionLength = start - end + 1;
     CharSequence newText = e.getMessage();
     
-    Editable textHolder1, textHolder2; //for manipulating strings;
-    suppress = true;
+    
+    Editable currentText; //for manipulating strings;
+    listen.suppress();
+    listen.flush();
+    currentText = messageText.getText();
     if(e.getType() == Event.ChangeType.CURSORMOVE)
     {
       messageText.setSelection(e.getCursor());
     }
     else if(e.getType() == Event.ChangeType.INSERT)
     {
-      try
+      if(start < currentText.length())
       {
-        textHolder1 = messageText.getText();
-        textHolder1.insert(start, newText);
+        try
+        {
+          currentText.insert(start, newText);
+        }
+        catch(Exception ex)
+        {
+          Log.d("Insert Error", ex.getMessage());
+        }
       }
-      catch(Exception ex)
+      else
       {
-        Log.d("Insert Error", ex.getMessage());
+        try
+        {
+          currentText.append(newText);
+        }
+        catch(Exception ex)
+        {
+          Log.d("Insert Error", ex.getMessage());
+        }
       }
+      messageText.setText(currentText);
     }
     else if(e.getType() == Event.ChangeType.DELETE)
     {
-      try
+      if(start > currentText.length())
       {
-        textHolder1 = messageText.getText();
-        textHolder1.delete(end, start);
-        
+        if(deletionLength >= currentText.length())
+        {
+          currentText.clear(); 
+        }
+        else
+        {
+          end = start - deletionLength +1;
+          currentText.delete(end, start);
+        } 
       }
-      catch(Exception ex)
+      else
       {
-        Log.d("Delete Error", ex.getMessage());
+        try
+        {
+          currentText.delete(end, start);
+        }
+        catch(Exception ex)
+        {
+          Log.d("Delete Error", ex.getMessage());
+        }
       }
     
     }
+    listen.unsuppress();
+    
   }
 }
 
