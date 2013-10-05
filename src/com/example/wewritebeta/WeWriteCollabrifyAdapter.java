@@ -179,7 +179,7 @@ public class WeWriteCollabrifyAdapter extends CollabrifyAdapter
     Utils.printMethodName(a.TAG);
     Log.d(a.TAG, "RECEIVED SUB ID:" + subId);
 
-    
+    Log.d("Serialize In", data.toString());
     Event event = new Event(data);
     
     a.receivedEvent(orderId, subId, event);

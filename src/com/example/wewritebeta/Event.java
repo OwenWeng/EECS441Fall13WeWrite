@@ -57,7 +57,7 @@ public class Event{
     carrierBuilder.setStartIndex(startIndex);
     carrierBuilder.setEndIndex(endIndex);
     carrierBuilder.setText(text.toString());
-    
+    eCarry = carrierBuilder.build();
     switch(type)  //TODO add UNDO and REDO
     {
       case INSERT:
@@ -76,26 +76,23 @@ public class Event{
     try
     {
       eCarry.parseFrom(by);
+      startIndex = eCarry.getStartIndex();
+      endIndex = eCarry.getEndIndex();
+      text = eCarry.getText();
+      
+      if(eCarry.getType() == EventCarrier.EventType.INSERT)
+      {
+        type = ChangeType.INSERT;
+      }
+      else if(eCarry.getType() == EventCarrier.EventType.DELETE)
+      {
+        type = ChangeType.DELETE;
+      }
     }
    catch(InvalidProtocolBufferException e)
    {
      Log.d("Protocol Buffer", e.getMessage());
    }
-    
-    startIndex = eCarry.getStartIndex();
-    endIndex = eCarry.getEndIndex();
-    text = eCarry.getText();
-    
-    if(eCarry.getType() == EventCarrier.EventType.INSERT)
-    {
-      type = ChangeType.INSERT;
-    }
-    else if(eCarry.getType() == EventCarrier.EventType.DELETE)
-    {
-      type = ChangeType.DELETE;
-    }
-    
-    
  }
     
   public Event(){}

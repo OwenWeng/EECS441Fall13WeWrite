@@ -120,6 +120,9 @@ public class MainActivity extends Activity {
     
     Event event = new Event(changeText, wholeText, 
         begin, end, cursorPos, type);
+    
+    byte[] b = event.serializeEvent();
+    Log.d("Serialize Out", b.toString());
     try
     {
       myClient.broadcast(event.serializeEvent(), "extra message");
