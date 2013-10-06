@@ -234,11 +234,26 @@ public class MainActivity extends Activity {
    
     e.setglobalID(orderId);
     tempGlobalEvent.add(e);
+    if(e.getType() == Event.ChangeType.UNDO )
+    {
+      undo(e.getGlobalID());
+      if(subId != -1)
+      {
+        Event evRedo = new Event(e.getMessage(), "", 
+            e.getStart(), e.getEnd(), 0, Event.ChangeType.UNDO);
+        redoEventStack.push(evRedo);
+      }
+      return;
+    }
     if(subId != -1)
     {
       localChanges.poll();
-      
+      Event evUndo = new Event(e.getMessage(), "", 
+      e.getStart(), e.getEnd(), 0, Event.ChangeType.UNDO);
+      evUndo.setglobalID(orderId);
+      undoEventStack.push(evUndo);
     }
+    
     Log.d("Receive Event", "localChangesEmptyAfter: " + localChanges.isEmpty());
     //If( this user just submitted AND other users have been submitting 
     //    OR other user submitted AND this user has no pending local changes
@@ -313,7 +328,6 @@ public class MainActivity extends Activity {
       }
       if((event.getGlobalID() == orderID) && !startUpdating)
       {
-        redoEventStack.push(event);
         removeIndex = totalGlobalEventState.indexOf(event);
         startUpdating = true;
         textHolder = new SpannableStringBuilder(event.getSavedState()); 
@@ -329,6 +343,8 @@ public class MainActivity extends Activity {
       currentCursorPos = textFinal.length();
     }
     final int cursorFinal = currentCursorPos;
+    storeSavedGlobalState = textFinal;
+    eventCombo = 0;
     runOnUiThread(new Runnable() {
       @Override
       public void run() 
