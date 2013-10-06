@@ -8,7 +8,7 @@ import com.example.wewritebeta.MessageProtos.EventCarrier;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 enum ChangeType{
-  INSERT, DELETE, CURSORMOVE
+  INSERT, DELETE, CURSORMOVE, UNDO, REDO;
 }
 
 public class Event{
@@ -75,7 +75,7 @@ public class Event{
      
     try
     {
-      eCarry.parseFrom(by);
+      eCarry = EventCarrier.parseFrom(by);
       startIndex = eCarry.getStartIndex();
       endIndex = eCarry.getEndIndex();
       text = eCarry.getText();

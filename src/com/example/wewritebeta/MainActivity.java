@@ -3,12 +3,14 @@ package com.example.wewritebeta;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Vector;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.Menu;
 import android.widget.Button;
@@ -36,6 +38,7 @@ public class MainActivity extends Activity {
   public ByteArrayInputStream baseFileBuffer;
   public ByteArrayOutputStream baseFileReceiveBuffer;
   public String broadcastedText;
+  public boolean inSession;
   
   //listener variables
   public Listener listen;
@@ -43,10 +46,10 @@ public class MainActivity extends Activity {
   public EditTextCursorWatcher messageText;
   
   //Global and local queue/stacks
-  public CharSequence storeSavedGlobalState;
-  public Vector<Event> totalGlobalEventState;
-  public Queue<Event> localChanges;
-  public Queue<Event> tempGlobalEvent;
+  public CharSequence storeSavedGlobalState = "";
+  public Vector<Event> totalGlobalEventState = new Vector<Event>();
+  public Queue<Event> localChanges = new LinkedList<Event>();;
+  public Queue<Event> tempGlobalEvent = new LinkedList<Event>();;
   
   
   @Override
@@ -57,9 +60,7 @@ public class MainActivity extends Activity {
     
     
     
-    
-    
-    
+     
     
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
@@ -79,6 +80,7 @@ public class MainActivity extends Activity {
     tags.add("team23");
     
     // Instantiate client object
+    inSession = false;
     boolean getLatestEvent = false;
     try
     {
@@ -117,19 +119,26 @@ public class MainActivity extends Activity {
   public void generateEvent(CharSequence changeText, CharSequence wholeText, 
       int begin, int end, int cursorPos, ChangeType type) //return type Event
   {
-    
-    Event event = new Event(changeText, wholeText, 
-        begin, end, cursorPos, type);
-    
-    byte[] b = event.serializeEvent();
-    Log.d("Serialize Out", b.toString());
-    try
+    if(inSession)
     {
-      myClient.broadcast(event.serializeEvent(), "extra message");
-    }
-    catch(CollabrifyException e)
-    {
-      Log.e("Collabrify Exception", e.getMessage());
+      Event event = new Event(changeText, wholeText, 
+            begin, end, cursorPos, type);
+      
+      localChanges.add(event);
+      
+      
+      //Just for debugging. Get rid of in final version
+      byte[] b = event.serializeEvent();
+      Log.d("Serialize Out", b.toString());
+
+      try
+      {
+        myClient.broadcast(event.serializeEvent(), "extra message");
+      }
+      catch(CollabrifyException e)
+      {
+        Log.e("Collabrify Exception", e.getMessage());
+      } 
     }
   }
   
@@ -202,13 +211,125 @@ public class MainActivity extends Activity {
       }
     
     }
-    listen.unsuppress();
+    listen.unsuppress(); 
+  }
+  
+  public Editable applyEvent(Event e, Editable currentText)
+  {
+    int start = e.getStart();
+    int end = e.getEnd();
+    int deletionLength = start - end + 1;
+    CharSequence newText = e.getMessage();
+    
+    if(e.getType() == Event.ChangeType.CURSORMOVE)
+    {
+      messageText.setSelection(e.getCursor());
+    }
+    else if(e.getType() == Event.ChangeType.INSERT)
+    {
+      if(start < currentText.length())
+      {
+        try
+        {
+          currentText.insert(start, newText);
+        }
+        catch(Exception ex)
+        {
+          Log.e("Insert Error", ex.getMessage());
+        }
+      }
+      else
+      {
+        try
+        {
+          currentText.append(newText);
+        }
+        catch(Exception ex)
+        {
+          Log.e("Insert Error", ex.getMessage());
+        }
+      }
+      
+    }
+    else if(e.getType() == Event.ChangeType.DELETE)
+    {
+      if(start > currentText.length())
+      {
+        if(deletionLength >= currentText.length())
+        {
+          currentText.clear(); 
+        }
+        else
+        {
+          end = start - deletionLength +1;
+          currentText.delete(end, start);
+        } 
+      }
+      else
+      {
+        try
+        {
+          currentText.delete(end, start);
+        }
+        catch(Exception ex)
+        {
+          Log.e("Delete Error", ex.getMessage());
+        }
+      }
+    }
+    
+    return currentText;
     
   }
   
-  public void receivedEvent(long glob, int sub, Event ev)
+  public void receivedEvent(long orderId, int subId, Event e)
   {
     
+    
+   
+    tempGlobalEvent.add(e);
+  
+    if(subId != -1 || localChanges.isEmpty()) 
+    {
+      Editable textHolder = new SpannableStringBuilder(storeSavedGlobalState);
+      for (Event event : tempGlobalEvent) 
+      {
+        textHolder = applyEvent(event, textHolder);
+        totalGlobalEventState.add(event);
+      }
+      
+      tempGlobalEvent.clear();
+      storeSavedGlobalState = textHolder;
+      
+      if(!localChanges.isEmpty())
+      {
+        localChanges.poll();
+        for (Event event : localChanges) 
+        {
+          textHolder = applyEvent(event, textHolder);
+        }
+      }
+      //to appease the compiler for runOnUiThread, the text must be a final variable;
+      final String textFinal = textHolder.toString(); 
+      int currentCursorPos = messageText.getSelectionStart();
+      
+      if(currentCursorPos > textFinal.length())
+      {
+        currentCursorPos = textFinal.length();
+      }
+      final int cursorFinal = currentCursorPos;
+      runOnUiThread(new Runnable() {
+        @Override
+        public void run() 
+        {
+          listen.suppress();
+          listen.flush();
+          messageText.setText(textFinal);
+          messageText.setSelection(cursorFinal);
+          listen.unsuppress();
+        }
+      });
+    }
   }
 }
 

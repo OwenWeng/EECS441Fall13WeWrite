@@ -27,6 +27,7 @@ public class WeWriteCollabrifyAdapter extends CollabrifyAdapter
   @Override
   public void onSessionCreated(long id) {
     Log.i(a.TAG, "Session created, id: " + id);
+    a.inSession = true;
     a.sessionId = id;
     a.runOnUiThread(new Runnable() {
       @Override
@@ -123,6 +124,7 @@ public class WeWriteCollabrifyAdapter extends CollabrifyAdapter
   @Override
   public void onSessionJoined(long maxOrderId, long baseFileSize) {
     Log.i(a.TAG, "Session Joined");
+    a.inSession = true;
     if (baseFileSize > 0) {
       // initialize buffer to receive base file
       // baseFileReceiveBuffer = new ByteArrayOutputStream((int)
@@ -163,6 +165,7 @@ public class WeWriteCollabrifyAdapter extends CollabrifyAdapter
   @Override
   public void onDisconnect() {
     Log.i(a.TAG, "disconnected");
+    a.inSession = false;
     a.runOnUiThread(new Runnable() {
 
       @Override
