@@ -29,12 +29,22 @@ public class WeWriteCollabrifyAdapter extends CollabrifyAdapter
   public void onSessionCreated(long id) {
     Log.i(a.TAG, "Session created, id: " + id);
     createdSession = true;
+    
+    a.eventCombo = 0;
+    a.localChanges.clear();
+    a.tempGlobalEvent.clear();
+    a.totalGlobalEventState.clear();
+    a.storeSavedGlobalState = "";
     a.inSession = true;
     a.sessionId = id;
     a.runOnUiThread(new Runnable() {
       @Override
       public void run() {
         a.createSessionButton.setText(a.sessionName);
+        a.listen.suppress();
+        a.messageText.setText("");
+        a.messageText.setSelection(0);
+        a.listen.unsuppress();
       }
     });
   }
@@ -127,6 +137,11 @@ public class WeWriteCollabrifyAdapter extends CollabrifyAdapter
   public void onSessionJoined(long maxOrderId, long baseFileSize) {
     Log.i(a.TAG, "Session Joined");
     createdSession = false;
+    a.eventCombo = 0;
+    a.localChanges.clear();
+    a.tempGlobalEvent.clear();
+    a.totalGlobalEventState.clear();
+    a.storeSavedGlobalState = "";
     a.inSession = true;
     if (baseFileSize > 0) {
       // initialize buffer to receive base file
@@ -138,6 +153,10 @@ public class WeWriteCollabrifyAdapter extends CollabrifyAdapter
       @Override
       public void run() {
         a.createSessionButton.setText(a.sessionName);
+        a.listen.suppress();
+        a.messageText.setText("");
+        a.messageText.setSelection(0);
+        a.listen.unsuppress();
       }
     });
   }

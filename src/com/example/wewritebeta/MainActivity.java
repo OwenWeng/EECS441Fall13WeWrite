@@ -57,6 +57,8 @@ public class MainActivity extends Activity {
   public Queue<Event> localChanges = new LinkedList<Event>();
   public Queue<Event> tempGlobalEvent = new LinkedList<Event>();
   public Stack<Event> redoEventStack = new Stack<Event>();
+  public Stack<Event> undoEventStack = new Stack<Event>();
+  
   
   
   @Override
@@ -227,14 +229,17 @@ public class MainActivity extends Activity {
         + "end: " + Integer.toString(e.getEnd()) + "text" + e.getMessage();
     Log.d("Receive Event", "Event: " + test + " subId: " + Integer.toString(subId));
     Log.d("Receive Event", "eventCombo: " + Integer.toString(eventCombo));
+    Log.d("Receive Event", "localChangesEmptyBefore: " + localChanges.isEmpty());
+    Log.d("Receive Event", "saved state: " + storeSavedGlobalState);
    
     e.setglobalID(orderId);
     tempGlobalEvent.add(e);
     if(subId != -1)
     {
       localChanges.poll();
+      
     }
-    
+    Log.d("Receive Event", "localChangesEmptyAfter: " + localChanges.isEmpty());
     //If( this user just submitted AND other users have been submitting 
     //    OR other user submitted AND this user has no pending local changes
     //    OR other user just submitted AND this user has been submitting)
