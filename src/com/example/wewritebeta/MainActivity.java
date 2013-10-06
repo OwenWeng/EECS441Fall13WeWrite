@@ -223,8 +223,10 @@ public class MainActivity extends Activity {
     
     CharSequence test = "type: " + e.getType().toString() +  "start: " + Integer.toString(e.getStart()) 
         + "end: " + Integer.toString(e.getEnd()) + "text" + e.getMessage();
-    Log.d("Receive Event", "Event: " + test);
+    Log.d("Receive Event", "Event: " + test + " subId: " + Integer.toString(subId));
+    Log.d("Receive Event", "eventCombo: " + Integer.toString(eventCombo));
    
+    e.setglobalID(orderId);
     tempGlobalEvent.add(e);
     if(subId != -1)
     {
@@ -240,6 +242,7 @@ public class MainActivity extends Activity {
       Editable textHolder = new SpannableStringBuilder(storeSavedGlobalState);
       for (Event event : tempGlobalEvent) 
       {
+        event.setSavedState(textHolder.toString());
         textHolder = applyEvent(event, textHolder);
         totalGlobalEventState.add(event);
       }
@@ -285,6 +288,50 @@ public class MainActivity extends Activity {
     {
       eventCombo++;
     }
+  }
+  
+  public void undo(long orderID)
+  {
+    int removeIndex = 0, replaceIndex = 0;
+    boolean startUpdating = false;
+    Editable textHolder = new SpannableStringBuilder("");;
+    for (Event event : totalGlobalEventState) 
+    {
+      if(startUpdating)
+      {
+        replaceIndex = totalGlobalEventState.indexOf(event);
+        event.setSavedState(textHolder.toString());
+        textHolder = applyEvent(event, textHolder);
+        totalGlobalEventState.set(replaceIndex, event);
+      }
+      if(event.getGlobalID() == orderID)
+      {
+        removeIndex = totalGlobalEventState.indexOf(event);
+        startUpdating = true;
+        textHolder = new SpannableStringBuilder(event.getSavedState()); 
+      }
+      
+    }
+    totalGlobalEventState.removeElementAt(removeIndex);
+    
+    final String textFinal = textHolder.toString(); 
+    int currentCursorPos = messageText.getSelectionStart();
+    if(currentCursorPos > textFinal.length())
+    {
+      currentCursorPos = textFinal.length();
+    }
+    final int cursorFinal = currentCursorPos;
+    runOnUiThread(new Runnable() {
+      @Override
+      public void run() 
+      {
+        listen.suppress();
+        listen.flush();
+        messageText.setText(textFinal);
+        messageText.setSelection(cursorFinal);
+        listen.unsuppress();
+      }
+    });
   }
 }
 

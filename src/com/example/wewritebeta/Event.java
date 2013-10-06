@@ -16,13 +16,13 @@ public class Event{
   private int startIndex;
   private int endIndex;
   private CharSequence text;
-  private CharSequence wholeText;
+  private CharSequence savedState;
   private int cursorLoc;
   private int bufferStringCount;
   private ChangeType type;
   private EventCarrier.Builder carrierBuilder = EventCarrier.newBuilder();
   private EventCarrier eCarry;
-  private long subID;
+  private long globalID;
   
   
   public enum ChangeType
@@ -53,7 +53,7 @@ public class Event{
     cursorLoc = cursorPos;
     type = cType;
     text = change;
-    wholeText = whole;
+    savedState = whole;
     carrierBuilder.setStartIndex(startIndex);
     carrierBuilder.setEndIndex(endIndex);
     carrierBuilder.setText(text.toString());
@@ -123,8 +123,21 @@ public class Event{
   {
     return cursorLoc;
   }
-  public void setSubID(long ID)
+  public void setglobalID(long ID)
   {
-    subID = ID;
+    globalID = ID;
+  }
+  public void setSavedState(CharSequence c)
+  {
+    savedState = c;
+  }
+  public CharSequence getSavedState()
+  {
+    return savedState;
+  }
+  
+  public long getGlobalID()
+  {
+    return globalID;
   }
 }

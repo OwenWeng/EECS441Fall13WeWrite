@@ -19,6 +19,7 @@ import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
 public class WeWriteCollabrifyAdapter extends CollabrifyAdapter
 {
   private MainActivity a;
+  static private boolean createdSession = false;
   public WeWriteCollabrifyAdapter(MainActivity a) {
     this.a = a;
   }
@@ -27,6 +28,7 @@ public class WeWriteCollabrifyAdapter extends CollabrifyAdapter
   @Override
   public void onSessionCreated(long id) {
     Log.i(a.TAG, "Session created, id: " + id);
+    createdSession = true;
     a.inSession = true;
     a.sessionId = id;
     a.runOnUiThread(new Runnable() {
@@ -124,6 +126,7 @@ public class WeWriteCollabrifyAdapter extends CollabrifyAdapter
   @Override
   public void onSessionJoined(long maxOrderId, long baseFileSize) {
     Log.i(a.TAG, "Session Joined");
+    createdSession = false;
     a.inSession = true;
     if (baseFileSize > 0) {
       // initialize buffer to receive base file
@@ -194,4 +197,10 @@ public class WeWriteCollabrifyAdapter extends CollabrifyAdapter
       }
     });
   }
+  
+  public static boolean createdSession()
+  {
+    return createdSession;
+  }
 }
+
