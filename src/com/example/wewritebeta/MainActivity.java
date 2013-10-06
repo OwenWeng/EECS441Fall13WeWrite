@@ -40,6 +40,11 @@ public class MainActivity extends Activity {
   public String broadcastedText;
   public boolean inSession;
   
+  //0 in the default state, negative if events have been coming from other users, 
+  //  and positive if coming from this user. 
+  public int eventCombo;
+  
+  
   //listener variables
   public Listener listen;
   public boolean suppress;
@@ -59,7 +64,7 @@ public class MainActivity extends Activity {
     
     
     
-    
+    eventCombo = 0;
      
     
     super.onCreate(savedInstanceState);
@@ -126,14 +131,14 @@ public class MainActivity extends Activity {
       
       localChanges.add(event);
       
-      
-      //Just for debugging. Get rid of in final version
-      byte[] b = event.serializeEvent();
-      Log.d("Serialize Out", b.toString());
-
+      final byte[] b = event.serializeEvent();
+      CharSequence test = "type: " + event.getType().toString() +  "start: " + Integer.toString(event.getStart()) 
+          + "end: " + Integer.toString(event.getEnd());
+      Log.d("Broadcast Event", "Event: " + test);
+     
       try
       {
-        myClient.broadcast(event.serializeEvent(), "extra message");
+        myClient.broadcast(b, "extra message");
       }
       catch(CollabrifyException e)
       {
@@ -142,77 +147,7 @@ public class MainActivity extends Activity {
     }
   }
   
-  public void applyEvent(Event e)
-  {
-    int start = e.getStart();
-    int end = e.getEnd();
-    int deletionLength = start - end + 1;
-    CharSequence newText = e.getMessage();
-    
-    
-    Editable currentText; //for manipulating strings;
-    listen.suppress();
-    listen.flush();
-    currentText = messageText.getText();
-    if(e.getType() == Event.ChangeType.CURSORMOVE)
-    {
-      messageText.setSelection(e.getCursor());
-    }
-    else if(e.getType() == Event.ChangeType.INSERT)
-    {
-      if(start < currentText.length())
-      {
-        try
-        {
-          currentText.insert(start, newText);
-        }
-        catch(Exception ex)
-        {
-          Log.e("Insert Error", ex.getMessage());
-        }
-      }
-      else
-      {
-        try
-        {
-          currentText.append(newText);
-        }
-        catch(Exception ex)
-        {
-          Log.e("Insert Error", ex.getMessage());
-        }
-      }
-      messageText.setText(currentText);
-    }
-    else if(e.getType() == Event.ChangeType.DELETE)
-    {
-      if(start > currentText.length())
-      {
-        if(deletionLength >= currentText.length())
-        {
-          currentText.clear(); 
-        }
-        else
-        {
-          end = start - deletionLength +1;
-          currentText.delete(end, start);
-        } 
-      }
-      else
-      {
-        try
-        {
-          currentText.delete(end, start);
-        }
-        catch(Exception ex)
-        {
-          Log.e("Delete Error", ex.getMessage());
-        }
-      }
-    
-    }
-    listen.unsuppress(); 
-  }
+  
   
   public Editable applyEvent(Event e, Editable currentText)
   {
@@ -285,11 +220,21 @@ public class MainActivity extends Activity {
   public void receivedEvent(long orderId, int subId, Event e)
   {
     
-    
+    CharSequence test = "type: " + e.getType().toString() +  "start: " + Integer.toString(e.getStart()) 
+        + "end: " + Integer.toString(e.getEnd());
+    Log.d("Receive Event", "Event: " + test);
    
     tempGlobalEvent.add(e);
-  
-    if(subId != -1 || localChanges.isEmpty()) 
+    if(subId != -1)
+    {
+      localChanges.poll();
+    }
+    
+    //If( this user just submitted AND other users have been submitting 
+    //    OR other user submitted AND this user has no pending local changes
+    //    OR other user just submitted AND this user has been submitting)
+    //    THEN apply changes in the queue and update UI
+    if((subId != -1 && eventCombo < 0) || (subId == -1 && localChanges.isEmpty()) || (subId == -1 && eventCombo > 0)  ) 
     {
       Editable textHolder = new SpannableStringBuilder(storeSavedGlobalState);
       for (Event event : tempGlobalEvent) 
@@ -303,7 +248,6 @@ public class MainActivity extends Activity {
       
       if(!localChanges.isEmpty())
       {
-        localChanges.poll();
         for (Event event : localChanges) 
         {
           textHolder = applyEvent(event, textHolder);
@@ -329,6 +273,16 @@ public class MainActivity extends Activity {
           listen.unsuppress();
         }
       });
+      
+      eventCombo = 0;
+    }
+    else if(subId == -1)
+    {
+      eventCombo--;
+    }
+    else
+    {
+      eventCombo++;
     }
   }
 }

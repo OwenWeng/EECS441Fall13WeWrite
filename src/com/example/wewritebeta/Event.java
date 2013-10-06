@@ -57,7 +57,7 @@ public class Event{
     carrierBuilder.setStartIndex(startIndex);
     carrierBuilder.setEndIndex(endIndex);
     carrierBuilder.setText(text.toString());
-    eCarry = carrierBuilder.build();
+    
     switch(type)  //TODO add UNDO and REDO
     {
       case INSERT:
@@ -67,10 +67,11 @@ public class Event{
         carrierBuilder.setType(EventCarrier.EventType.DELETE);
         break;
     }
+    eCarry = carrierBuilder.build();
     
   }
   
-  public Event(byte[] by )
+  public Event(final byte[] by )
   {
      
     try
@@ -80,6 +81,7 @@ public class Event{
       endIndex = eCarry.getEndIndex();
       text = eCarry.getText();
       
+      Log.d("Deserialize", "Event type: " + eCarry.getType().toString());
       if(eCarry.getType() == EventCarrier.EventType.INSERT)
       {
         type = ChangeType.INSERT;
