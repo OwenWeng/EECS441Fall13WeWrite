@@ -133,7 +133,7 @@ public class MainActivity extends Activity {
       
       final byte[] b = event.serializeEvent();
       CharSequence test = "type: " + event.getType().toString() +  "start: " + Integer.toString(event.getStart()) 
-          + "end: " + Integer.toString(event.getEnd());
+          + "end: " + Integer.toString(event.getEnd()) + "text" + event.getMessage();
       Log.d("Broadcast Event", "Event: " + test);
      
       try
@@ -197,6 +197,7 @@ public class MainActivity extends Activity {
         else
         {
           end = start - deletionLength +1;
+          start = currentText.length();
           currentText.delete(end, start);
         } 
       }
@@ -221,7 +222,7 @@ public class MainActivity extends Activity {
   {
     
     CharSequence test = "type: " + e.getType().toString() +  "start: " + Integer.toString(e.getStart()) 
-        + "end: " + Integer.toString(e.getEnd());
+        + "end: " + Integer.toString(e.getEnd()) + "text" + e.getMessage();
     Log.d("Receive Event", "Event: " + test);
    
     tempGlobalEvent.add(e);
