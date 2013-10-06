@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 import java.util.Vector;
 
 import android.app.Activity;
@@ -53,8 +54,9 @@ public class MainActivity extends Activity {
   //Global and local queue/stacks
   public CharSequence storeSavedGlobalState = "";
   public Vector<Event> totalGlobalEventState = new Vector<Event>();
-  public Queue<Event> localChanges = new LinkedList<Event>();;
-  public Queue<Event> tempGlobalEvent = new LinkedList<Event>();;
+  public Queue<Event> localChanges = new LinkedList<Event>();
+  public Queue<Event> tempGlobalEvent = new LinkedList<Event>();
+  public Stack<Event> redoEventStack = new Stack<Event>();
   
   
   @Override
@@ -304,8 +306,9 @@ public class MainActivity extends Activity {
         textHolder = applyEvent(event, textHolder);
         totalGlobalEventState.set(replaceIndex, event);
       }
-      if(event.getGlobalID() == orderID)
+      if((event.getGlobalID() == orderID) && !startUpdating)
       {
+        redoEventStack.push(event);
         removeIndex = totalGlobalEventState.indexOf(event);
         startUpdating = true;
         textHolder = new SpannableStringBuilder(event.getSavedState()); 
@@ -313,6 +316,56 @@ public class MainActivity extends Activity {
       
     }
     totalGlobalEventState.removeElementAt(removeIndex);
+    
+    final String textFinal = textHolder.toString(); 
+    int currentCursorPos = messageText.getSelectionStart();
+    if(currentCursorPos > textFinal.length())
+    {
+      currentCursorPos = textFinal.length();
+    }
+    final int cursorFinal = currentCursorPos;
+    runOnUiThread(new Runnable() {
+      @Override
+      public void run() 
+      {
+        listen.suppress();
+        listen.flush();
+        messageText.setText(textFinal);
+        messageText.setSelection(cursorFinal);
+        listen.unsuppress();
+      }
+    });
+  }
+  
+  public void redo(Event e)
+  {
+    int addIndex = 0, replaceIndex = 0;
+    boolean startUpdating = false;
+    Editable textHolder = new SpannableStringBuilder("");;
+    for (Event event : totalGlobalEventState) 
+    {
+      if(startUpdating)
+      {
+        replaceIndex = totalGlobalEventState.indexOf(event);
+        event.setSavedState(textHolder.toString());
+        textHolder = applyEvent(event, textHolder);
+        totalGlobalEventState.set(replaceIndex, event);
+      }
+      if( (event.getGlobalID() > e.getGlobalID()) && !startUpdating)
+      {
+        startUpdating = true;
+        addIndex = totalGlobalEventState.indexOf(event);
+        replaceIndex = addIndex;
+        e.setSavedState(event.getSavedState());
+        textHolder = new SpannableStringBuilder(event.getSavedState());
+        textHolder = applyEvent(e, textHolder);
+        event.setSavedState(textHolder.toString());
+        textHolder = applyEvent(event, textHolder);
+        totalGlobalEventState.set(replaceIndex, event);
+      }
+      
+    }
+    totalGlobalEventState.add(addIndex, e);
     
     final String textFinal = textHolder.toString(); 
     int currentCursorPos = messageText.getSelectionStart();
