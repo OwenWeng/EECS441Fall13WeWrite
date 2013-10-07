@@ -72,13 +72,35 @@ public class WeWriteCollabrifyAdapter extends CollabrifyAdapter
     return temp;
   }
   
+  @Override
+  public void onBaseFileChunkReceived(byte[] baseFileChunk) {
+    
+     try { 
+       if (baseFileChunk != null) {
+         a.baseFileReceiveBuffer.write(baseFileChunk); 
+       } else {
+         a.runOnUiThread(new Runnable() {
+           @Override 
+           public void run() {
+             a.messageText.setText(a.baseFileReceiveBuffer.toString()); 
+           } 
+         }); //
+         a.baseFileReceiveBuffer.close(); 
+       } 
+     } 
+     catch (IOException e) { 
+       // TODO Auto-generated catch block 
+       e.printStackTrace(); 
+     }
+  }
   
   @Override
   public void onBaseFileUploadComplete(long baseFileSize) {
     a.runOnUiThread(new Runnable() {
 
       @Override
-      public void run() {
+      public void run() 
+      {
         //broadcastedText.setText(sessionName);
       }
     });
@@ -162,27 +184,7 @@ public class WeWriteCollabrifyAdapter extends CollabrifyAdapter
   }
   
   
-  @Override
-  public void onBaseFileChunkReceived(byte[] baseFileChunk) {
-    
-     try { 
-       if (baseFileChunk != null) {
-         a.baseFileReceiveBuffer.write(baseFileChunk); 
-       } else {
-         a.runOnUiThread(new Runnable() {
-           @Override 
-           public void run() {
-             //a.broadcastedText.setText(a.baseFileReceiveBuffer.toString()); 
-           } 
-         }); //
-         a.baseFileReceiveBuffer.close(); 
-       } 
-     } 
-     catch (IOException e) { 
-       // TODO Auto-generated catch block 
-       e.printStackTrace(); 
-     }
-  }
+ 
   
   @Override
   public void onDisconnect() {

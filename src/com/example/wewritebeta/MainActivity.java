@@ -137,7 +137,7 @@ public class MainActivity extends Activity {
       
       final byte[] b = event.serializeEvent();
       CharSequence test = "type: " + event.getType().toString() +  "start: " + Integer.toString(event.getStart()) 
-          + "end: " + Integer.toString(event.getEnd()) + "text" + event.getMessage();
+          + "end: " + Integer.toString(event.getEnd()) + " text: " + event.getMessage();
       Log.d("Broadcast Event", "Event: " + test);
      
       try
@@ -226,7 +226,7 @@ public class MainActivity extends Activity {
   {
     
     CharSequence test = "type: " + e.getType().toString() +  "start: " + Integer.toString(e.getStart()) 
-        + "end: " + Integer.toString(e.getEnd()) + "text" + e.getMessage();
+        + "end: " + Integer.toString(e.getEnd()) + " text: " + e.getMessage();
     Log.d("Receive Event", "Event: " + test + " subId: " + Integer.toString(subId));
     Log.d("Receive Event", "eventCombo: " + Integer.toString(eventCombo));
     Log.d("Receive Event", "localChangesEmptyBefore: " + localChanges.isEmpty());
@@ -310,13 +310,14 @@ public class MainActivity extends Activity {
     {
       eventCombo++;
     }
+    Log.d("Receive Event", "changedTo: " + messageText.getText().toString());
   }
   
   public void undo(long orderID)
   {
     int removeIndex = 0, replaceIndex = 0;
     boolean startUpdating = false;
-    Editable textHolder = new SpannableStringBuilder("");;
+    Editable textHolder = new SpannableStringBuilder("");
     for (Event event : totalGlobalEventState) 
     {
       if(startUpdating)
@@ -335,7 +336,6 @@ public class MainActivity extends Activity {
       
     }
     totalGlobalEventState.removeElementAt(removeIndex);
-    
     final String textFinal = textHolder.toString(); 
     int currentCursorPos = messageText.getSelectionStart();
     if(currentCursorPos > textFinal.length())
