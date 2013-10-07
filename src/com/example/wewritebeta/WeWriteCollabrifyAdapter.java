@@ -32,6 +32,9 @@ public class WeWriteCollabrifyAdapter extends CollabrifyAdapter
     
     a.eventCombo = 0;
     a.localChanges.clear();
+    a.undoEventStack.clear();
+    a.timer.postDelayed(a.runUpdateInterface, a.timerLength);
+    a.redoEventStack.clear();
     a.tempGlobalEvent.clear();
     a.totalGlobalEventState.clear();
     a.storeSavedGlobalState = "";
@@ -160,6 +163,9 @@ public class WeWriteCollabrifyAdapter extends CollabrifyAdapter
     Log.i(a.TAG, "Session Joined");
     createdSession = false;
     a.eventCombo = 0;
+    a.undoEventStack.clear();
+    a.redoEventStack.clear();
+    a.timer.postDelayed(a.runUpdateInterface, a.timerLength);
     a.localChanges.clear();
     a.tempGlobalEvent.clear();
     a.totalGlobalEventState.clear();
@@ -190,6 +196,7 @@ public class WeWriteCollabrifyAdapter extends CollabrifyAdapter
   public void onDisconnect() {
     Log.i(a.TAG, "disconnected");
     a.inSession = false;
+    a.timer.removeCallbacks(a.runUpdateInterface);
     a.runOnUiThread(new Runnable() {
 
       @Override

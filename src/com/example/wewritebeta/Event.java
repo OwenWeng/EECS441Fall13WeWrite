@@ -57,8 +57,9 @@ public class Event{
     carrierBuilder.setStartIndex(startIndex);
     carrierBuilder.setEndIndex(endIndex);
     carrierBuilder.setText(text.toString());
+    carrierBuilder.setGlobalID(0);
     
-    switch(type)  //TODO add UNDO and REDO
+    switch(type) 
     {
       case INSERT:
         carrierBuilder.setType(EventCarrier.EventType.INSERT);
@@ -66,8 +67,13 @@ public class Event{
       case DELETE:
         carrierBuilder.setType(EventCarrier.EventType.DELETE);
         break;
+      case UNDO:
+        carrierBuilder.setType(EventCarrier.EventType.UNDO);
+        break;
+      case REDO:
+        carrierBuilder.setType(EventCarrier.EventType.REDO);
+        break;
     }
-    eCarry = carrierBuilder.build();
     
   }
   
@@ -80,6 +86,7 @@ public class Event{
       startIndex = eCarry.getStartIndex();
       endIndex = eCarry.getEndIndex();
       text = eCarry.getText();
+      globalID = eCarry.getGlobalID();
       
       Log.d("Deserialize", "Event type: " + eCarry.getType().toString());
       if(eCarry.getType() == EventCarrier.EventType.INSERT)
@@ -90,6 +97,14 @@ public class Event{
       {
         type = ChangeType.DELETE;
       }
+      else if(eCarry.getType() == EventCarrier.EventType.UNDO)
+      {
+        type = ChangeType.UNDO;
+      }
+      else if(eCarry.getType() == EventCarrier.EventType.REDO)
+      {
+        type = ChangeType.REDO;
+      }
     }
    catch(InvalidProtocolBufferException e)
    {
@@ -97,10 +112,10 @@ public class Event{
    }
  }
     
-  public Event(){}
   
   public byte[] serializeEvent()
   {
+    eCarry = carrierBuilder.build();
     return eCarry.toByteArray();
   }
   public ChangeType getType()
@@ -126,6 +141,7 @@ public class Event{
   public void setglobalID(long ID)
   {
     globalID = ID;
+    carrierBuilder.setGlobalID(ID);
   }
   public void setSavedState(CharSequence c)
   {
@@ -139,5 +155,26 @@ public class Event{
   public long getGlobalID()
   {
     return globalID;
+  }
+  
+  public void setType(ChangeType t)
+  {
+    type = t;
+    switch(type) 
+    {
+      case INSERT:
+        carrierBuilder.setType(EventCarrier.EventType.INSERT);
+        break;
+      case DELETE:
+        carrierBuilder.setType(EventCarrier.EventType.DELETE);
+        break;
+      case UNDO:
+        carrierBuilder.setType(EventCarrier.EventType.UNDO);
+        break;
+      case REDO:
+        carrierBuilder.setType(EventCarrier.EventType.REDO);
+        break;
+    }
+    
   }
 }

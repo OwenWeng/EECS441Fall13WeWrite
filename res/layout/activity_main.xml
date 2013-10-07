@@ -37,14 +37,6 @@
         android:layout_toRightOf="@+id/joinSessionButton"
         android:hint="@string/leave_session" />
 
-    <CheckBox
-        android:id="@+id/baseFile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/leaveSessionButton"
-        android:layout_alignBottom="@+id/leaveSessionButton"
-        android:layout_toRightOf="@+id/leaveSessionButton"
-        android:hint="@string/base_file" />
 
     <TextView
         android:id="@+id/session"

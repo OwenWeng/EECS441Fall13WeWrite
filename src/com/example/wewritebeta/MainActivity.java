@@ -10,10 +10,12 @@ import java.util.Vector;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.CheckBox;
 
@@ -45,10 +47,25 @@ public class MainActivity extends Activity {
   //  and positive if coming from this user. 
   public int eventCombo;
   
+  //Interface Update variables
+  public Handler timer = new Handler();
+  public int timerLength = 10000;
+  public Runnable runUpdateInterface = new Runnable() 
+  {
+    @Override
+    public void run() 
+    {
+      if(!tempGlobalEvent.isEmpty())
+      {
+        updateInterface();
+      }
+      timer.postDelayed(runUpdateInterface, timerLength);
+    }
+  }; 
+  
   
   //listener variables
   public Listener listen;
-  public boolean suppress;
   public EditTextCursorWatcher messageText;
   
   //Global and local queue/stacks
@@ -60,13 +77,13 @@ public class MainActivity extends Activity {
   public Stack<Event> undoEventStack = new Stack<Event>();
   
   
-  
   @Override
   protected void onCreate(Bundle savedInstanceState) 
   {
     
     
     
+   
     
     eventCombo = 0;
      
@@ -77,14 +94,13 @@ public class MainActivity extends Activity {
     createSessionButton = (Button) findViewById(R.id.createSessionButton);
     joinSeesionButton = (Button) findViewById(R.id.joinSessionButton);
     leaveSessionButton = (Button) findViewById(R.id.leaveSessionButton);
-    baseFile = (CheckBox) findViewById(R.id.baseFile);
+    //baseFile = (CheckBox) findViewById(R.id.baseFile);
     
     //instantiate listener and EditTextCursorWatcher
     listen = new Listener(this);
     listen.unsuppress();
     messageText = (EditTextCursorWatcher) findViewById(R.id.edit_message);
     messageText.setMainActivity(this);
-    suppress = false;
     
     tags.add("team23");
     
@@ -115,18 +131,62 @@ public class MainActivity extends Activity {
     return true;
   }
   
-  /*@Override
-  public boolean onOptionsItemSelected(MenuItem item) 
+  
+  
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item)
   {
-    switch(item.getItemId())
+    switch ( item.getItemId() )
     {
       case R.id.action_undo:
+
+        if( undoEventStack.isEmpty() )
+        {
+          Log.e("MYMYundo", "The undo stack is empty");
+        }
+        else
+        {
+          Event event = undoEventStack.pop();
+          final byte[] e = event.serializeEvent();
+          try
+          {
+            myClient.broadcast(e, "extra message");
+          }
+          catch( CollabrifyException ex )
+          {
+            Log.e("Collabrify Exception", ex.getMessage());
+          }
+        }
+
+
+        return true;
+      case R.id.action_redo:
+
+        if( redoEventStack.isEmpty() ) {
+          Log.e("MYMYredo", "The redo stack empty");
+        }
+        else
+        {
+          Event event = redoEventStack.pop();
+          final byte[] e = event.serializeEvent();
+          try
+          {
+            myClient.broadcast(e, "extra message");
+          }
+          catch( CollabrifyException ex )
+          {
+            Log.e("Collabrify Exception", ex.getMessage());
+          } 
+        }
+
+        return true;
+      default:
+        return super.onOptionsItemSelected(item);
     }
-    
-  }*/
+  }
   
   public void generateEvent(CharSequence changeText, CharSequence wholeText, 
-      int begin, int end, int cursorPos, ChangeType type) //return type Event
+      int begin, int end, int cursorPos, ChangeType type) 
   {
     if(inSession)
     {
@@ -149,6 +209,7 @@ public class MainActivity extends Activity {
         Log.e("Collabrify Exception", e.getMessage());
       } 
     }
+    
   }
   
   
@@ -200,9 +261,17 @@ public class MainActivity extends Activity {
         }
         else
         {
-          end = start - deletionLength +1;
           start = currentText.length();
-          currentText.delete(end, start);
+          end = start - deletionLength +1;
+          
+          try
+          {
+            currentText.delete(end, start);
+          }
+          catch(Exception ex)
+          {
+            Log.e("Delete Error", ex.getMessage());
+          }
         } 
       }
       else
@@ -231,28 +300,58 @@ public class MainActivity extends Activity {
     Log.d("Receive Event", "eventCombo: " + Integer.toString(eventCombo));
     Log.d("Receive Event", "localChangesEmptyBefore: " + localChanges.isEmpty());
     Log.d("Receive Event", "saved state: " + storeSavedGlobalState);
-   
-    e.setglobalID(orderId);
-    tempGlobalEvent.add(e);
-    if(e.getType() == Event.ChangeType.UNDO )
+    
+    
+    
+    
+    
+    if( e.getType() == Event.ChangeType.UNDO )
     {
       undo(e.getGlobalID());
-      if(subId != -1)
+      if( subId != -1 )
       {
-        Event evRedo = new Event(e.getMessage(), "", 
-            e.getStart(), e.getEnd(), 0, Event.ChangeType.UNDO);
+        Event evRedo = new Event(e.getMessage(), "", e.getStart(), e.getEnd(),
+            0, Event.ChangeType.REDO);
+        evRedo.setglobalID(e.getGlobalID());
         redoEventStack.push(evRedo);
       }
       return;
     }
-    if(subId != -1)
+    if( e.getType() == Event.ChangeType.REDO )
+    {
+      Event.ChangeType tempType;
+      if( e.getStart() < e.getEnd() )
+      {
+        tempType = Event.ChangeType.INSERT;
+      }
+      else
+      {
+        tempType = Event.ChangeType.DELETE;
+      }
+      Event evNew = new Event(e.getMessage(), "", e.getStart(), e.getEnd(), 0,
+          tempType);
+      evNew.setglobalID(e.getGlobalID());
+      redo(evNew);
+      if(subId != -1)
+      {
+        evNew.setType(Event.ChangeType.UNDO);
+        undoEventStack.push(evNew);
+      }
+      return;
+    }
+    
+    e.setglobalID(orderId);
+    tempGlobalEvent.add(e);
+    if( subId != -1 )
     {
       localChanges.poll();
-      Event evUndo = new Event(e.getMessage(), "", 
-      e.getStart(), e.getEnd(), 0, Event.ChangeType.UNDO);
+      Event evUndo = new Event(e.getMessage(), "", e.getStart(), e.getEnd(), 0,
+          Event.ChangeType.UNDO);
       evUndo.setglobalID(orderId);
       undoEventStack.push(evUndo);
     }
+    
+    
     
     Log.d("Receive Event", "localChangesEmptyAfter: " + localChanges.isEmpty());
     //If( this user just submitted AND other users have been submitting 
@@ -260,7 +359,8 @@ public class MainActivity extends Activity {
     //    OR other user just submitted AND this user has been submitting)
     //    THEN apply changes in the queue and update UI
     if((subId != -1 && eventCombo < 0) || (subId == -1 && localChanges.isEmpty()) || (subId == -1 && eventCombo > 0)  ) 
-    {
+    { 
+      timer.removeCallbacks(runUpdateInterface);
       Editable textHolder = new SpannableStringBuilder(storeSavedGlobalState);
       for (Event event : tempGlobalEvent) 
       {
@@ -271,7 +371,6 @@ public class MainActivity extends Activity {
       
       tempGlobalEvent.clear();
       storeSavedGlobalState = textHolder;
-      
       if(!localChanges.isEmpty())
       {
         for (Event event : localChanges) 
@@ -293,7 +392,9 @@ public class MainActivity extends Activity {
         public void run() 
         {
           listen.suppress();
+          Log.d("Receive Event", "textFinalBefore: " + textFinal);
           listen.flush();
+          Log.d("Receive Event", "textFinalAfter: " + textFinal);
           messageText.setText(textFinal);
           messageText.setSelection(cursorFinal);
           listen.unsuppress();
@@ -301,6 +402,7 @@ public class MainActivity extends Activity {
       });
       
       eventCombo = 0;
+      timer.postDelayed(runUpdateInterface, timerLength);
     }
     else if(subId == -1)
     {
@@ -315,9 +417,20 @@ public class MainActivity extends Activity {
   
   public void undo(long orderID)
   {
+ // Move tempGlobal to totalGlobal
+    Editable textHolder = new SpannableStringBuilder(storeSavedGlobalState);
+    for( Event event : tempGlobalEvent )
+    {
+      event.setSavedState(textHolder.toString());
+      textHolder = applyEvent(event, textHolder);
+      totalGlobalEventState.add(event);
+    }
+    tempGlobalEvent.clear();
+    
     int removeIndex = 0, replaceIndex = 0;
     boolean startUpdating = false;
-    Editable textHolder = new SpannableStringBuilder("");
+    
+ // Update totalGlobal
     for (Event event : totalGlobalEventState) 
     {
       if(startUpdating)
@@ -333,9 +446,21 @@ public class MainActivity extends Activity {
         startUpdating = true;
         textHolder = new SpannableStringBuilder(event.getSavedState()); 
       }
-      
+    }
+
+ // Apply local changes
+    if( !localChanges.isEmpty() )
+    {
+      for( Event event : localChanges )
+      {
+        textHolder = applyEvent(event, textHolder);
+      }
     }
     totalGlobalEventState.removeElementAt(removeIndex);
+    storeSavedGlobalState = textHolder.toString();
+    eventCombo = 0;
+    
+    // Set text to be displayed
     final String textFinal = textHolder.toString(); 
     int currentCursorPos = messageText.getSelectionStart();
     if(currentCursorPos > textFinal.length())
@@ -343,8 +468,7 @@ public class MainActivity extends Activity {
       currentCursorPos = textFinal.length();
     }
     final int cursorFinal = currentCursorPos;
-    storeSavedGlobalState = textFinal;
-    eventCombo = 0;
+    
     runOnUiThread(new Runnable() {
       @Override
       public void run() 
@@ -360,9 +484,21 @@ public class MainActivity extends Activity {
   
   public void redo(Event e)
   {
-    int addIndex = 0, replaceIndex = 0;
+ // Move tempGlobal to totalGlobal
+    Editable textHolder = new SpannableStringBuilder(storeSavedGlobalState);
+    for( Event event : tempGlobalEvent )
+    {
+      event.setSavedState(textHolder.toString());
+      textHolder = applyEvent(event, textHolder);
+      totalGlobalEventState.add(event);
+    }
+    tempGlobalEvent.clear();
+    
+    // Update totalGlobal
+    int replaceIndex = 0;
     boolean startUpdating = false;
-    Editable textHolder = new SpannableStringBuilder("");;
+    int addIndex = totalGlobalEventState.size();
+    
     for (Event event : totalGlobalEventState) 
     {
       if(startUpdating)
@@ -386,8 +522,24 @@ public class MainActivity extends Activity {
       }
       
     }
+    if(addIndex == totalGlobalEventState.size())
+    {
+      textHolder = applyEvent(e, textHolder);
+    }
     totalGlobalEventState.add(addIndex, e);
+    storeSavedGlobalState = textHolder;
+    eventCombo = 0;
     
+ // Apply local changes
+    if( !localChanges.isEmpty() )
+    {
+      for( Event event : localChanges )
+      {
+        textHolder = applyEvent(event, textHolder);
+      }
+    }
+
+    // Set text to be displayed
     final String textFinal = textHolder.toString(); 
     int currentCursorPos = messageText.getSelectionStart();
     if(currentCursorPos > textFinal.length())
@@ -406,6 +558,51 @@ public class MainActivity extends Activity {
         listen.unsuppress();
       }
     });
+  }
+  
+  public void updateInterface()
+  {
+    Editable textHolder = new SpannableStringBuilder(storeSavedGlobalState);
+    for (Event event : tempGlobalEvent) 
+    {
+      event.setSavedState(textHolder.toString());
+      textHolder = applyEvent(event, textHolder);
+      totalGlobalEventState.add(event);
+    }
+    
+    tempGlobalEvent.clear();
+    storeSavedGlobalState = textHolder;
+    if(!localChanges.isEmpty())
+    {
+      for (Event event : localChanges) 
+      {
+        textHolder = applyEvent(event, textHolder);
+      }
+    }
+    //to appease the compiler for runOnUiThread, the text must be a final variable;
+    final String textFinal = textHolder.toString(); 
+    int currentCursorPos = messageText.getSelectionStart();
+    
+    if(currentCursorPos > textFinal.length())
+    {
+      currentCursorPos = textFinal.length();
+    }
+    final int cursorFinal = currentCursorPos;
+    runOnUiThread(new Runnable() {
+      @Override
+      public void run() 
+      {
+        listen.suppress();
+        Log.d("Receive Event", "textFinalBefore: " + textFinal);
+        listen.flush();
+        Log.d("Receive Event", "textFinalAfter: " + textFinal);
+        messageText.setText(textFinal);
+        messageText.setSelection(cursorFinal);
+        listen.unsuppress();
+      }
+    });
+    
+    eventCombo = 0;
   }
 }
 

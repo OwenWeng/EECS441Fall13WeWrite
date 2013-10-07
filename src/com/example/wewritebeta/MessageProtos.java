@@ -56,15 +56,15 @@ public final class MessageProtos {
      */
     int getCursorLoc();
 
-    // optional int32 globalID = 5;
+    // optional int64 globalID = 5;
     /**
-     * <code>optional int32 globalID = 5;</code>
+     * <code>optional int64 globalID = 5;</code>
      */
     boolean hasGlobalID();
     /**
-     * <code>optional int32 globalID = 5;</code>
+     * <code>optional int64 globalID = 5;</code>
      */
-    int getGlobalID();
+    long getGlobalID();
 
     // optional .EventCarrier.EventType type = 6;
     /**
@@ -149,7 +149,7 @@ public final class MessageProtos {
             }
             case 40: {
               bitField0_ |= 0x00000010;
-              globalID_ = input.readInt32();
+              globalID_ = input.readInt64();
               break;
             }
             case 48: {
@@ -403,19 +403,19 @@ public final class MessageProtos {
       return cursorLoc_;
     }
 
-    // optional int32 globalID = 5;
+    // optional int64 globalID = 5;
     public static final int GLOBALID_FIELD_NUMBER = 5;
-    private int globalID_;
+    private long globalID_;
     /**
-     * <code>optional int32 globalID = 5;</code>
+     * <code>optional int64 globalID = 5;</code>
      */
     public boolean hasGlobalID() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>optional int32 globalID = 5;</code>
+     * <code>optional int64 globalID = 5;</code>
      */
-    public int getGlobalID() {
+    public long getGlobalID() {
       return globalID_;
     }
 
@@ -440,7 +440,7 @@ public final class MessageProtos {
       startIndex_ = 0;
       endIndex_ = 0;
       cursorLoc_ = 0;
-      globalID_ = 0;
+      globalID_ = 0L;
       type_ = MessageProtos.EventCarrier.EventType.INSERT;
     }
     private byte memoizedIsInitialized = -1;
@@ -468,7 +468,7 @@ public final class MessageProtos {
         output.writeInt32(4, cursorLoc_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeInt32(5, globalID_);
+        output.writeInt64(5, globalID_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeEnum(6, type_.getNumber());
@@ -500,7 +500,7 @@ public final class MessageProtos {
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(5, globalID_);
+          .computeInt64Size(5, globalID_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
@@ -630,7 +630,7 @@ public final class MessageProtos {
         bitField0_ = (bitField0_ & ~0x00000004);
         cursorLoc_ = 0;
         bitField0_ = (bitField0_ & ~0x00000008);
-        globalID_ = 0;
+        globalID_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000010);
         type_ = MessageProtos.EventCarrier.EventType.INSERT;
         bitField0_ = (bitField0_ & ~0x00000020);
@@ -922,35 +922,35 @@ public final class MessageProtos {
         return this;
       }
 
-      // optional int32 globalID = 5;
-      private int globalID_ ;
+      // optional int64 globalID = 5;
+      private long globalID_ ;
       /**
-       * <code>optional int32 globalID = 5;</code>
+       * <code>optional int64 globalID = 5;</code>
        */
       public boolean hasGlobalID() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>optional int32 globalID = 5;</code>
+       * <code>optional int64 globalID = 5;</code>
        */
-      public int getGlobalID() {
+      public long getGlobalID() {
         return globalID_;
       }
       /**
-       * <code>optional int32 globalID = 5;</code>
+       * <code>optional int64 globalID = 5;</code>
        */
-      public Builder setGlobalID(int value) {
+      public Builder setGlobalID(long value) {
         bitField0_ |= 0x00000010;
         globalID_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int32 globalID = 5;</code>
+       * <code>optional int64 globalID = 5;</code>
        */
       public Builder clearGlobalID() {
         bitField0_ = (bitField0_ & ~0x00000010);
-        globalID_ = 0;
+        globalID_ = 0L;
         onChanged();
         return this;
       }
@@ -1019,7 +1019,7 @@ public final class MessageProtos {
       "\n\rWeWrite.proto\"\323\001\n\014EventCarrier\022\014\n\004text" +
       "\030\001 \001(\t\022\022\n\nstartIndex\030\002 \001(\005\022\020\n\010endIndex\030\003" +
       " \001(\005\022\021\n\tcursorLoc\030\004 \001(\005\022\020\n\010globalID\030\005 \001(" +
-      "\005\022%\n\004type\030\006 \001(\0162\027.EventCarrier.EventType" +
+      "\003\022%\n\004type\030\006 \001(\0162\027.EventCarrier.EventType" +
       "\"C\n\tEventType\022\n\n\006INSERT\020\000\022\n\n\006DELETE\020\001\022\n\n" +
       "\006CURSOR\020\002\022\010\n\004UNDO\020\003\022\010\n\004REDO\020\004B\017B\rMessage" +
       "Protos"
