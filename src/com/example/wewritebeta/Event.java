@@ -140,4 +140,8 @@ public class Event{
   {
     return globalID;
   }
+  public void setType(ChangeType t)
+  {
+    type = t;
+  }
 }
