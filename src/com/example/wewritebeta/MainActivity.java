@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
   
   //Interface Update variables
   public Handler timer = new Handler();
-  public int timerLength = 10000;
+  public int timerLength = 5000;
   public Runnable runUpdateInterface = new Runnable() 
   {
     @Override
@@ -57,7 +57,7 @@ public class MainActivity extends Activity {
     {
       if(!tempGlobalEvent.isEmpty())
       {
-        updateInterface();
+      //  updateInterface();
       }
       timer.postDelayed(runUpdateInterface, timerLength);
     }
@@ -102,7 +102,7 @@ public class MainActivity extends Activity {
     messageText = (EditTextCursorWatcher) findViewById(R.id.edit_message);
     messageText.setMainActivity(this);
     
-    tags.add("team23");
+    tags.add("team23 3");
     
     // Instantiate client object
     inSession = false;
@@ -457,7 +457,6 @@ public class MainActivity extends Activity {
       }
     }
     totalGlobalEventState.removeElementAt(removeIndex);
-    storeSavedGlobalState = textHolder.toString();
     eventCombo = 0;
     
     // Set text to be displayed
@@ -605,4 +604,3 @@ public class MainActivity extends Activity {
     eventCombo = 0;
   }
 }
-

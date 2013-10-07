@@ -69,6 +69,9 @@ public class Listener
         {
           if(!suppress)
           {
+            m.timer.removeCallbacks(m.runUpdateInterface);
+            m.timer.postDelayed(m.runUpdateInterface, m.timerLength);
+            
             if(begin)
             {
 
@@ -94,22 +97,26 @@ public class Listener
         }
       });
     }
-    public void flush()
+    public boolean flush()
     {
+      boolean generatesEvent = false;
       timer.removeCallbacks(runEventGen);
       if(cursor < startIndex)
       {
         changeText = "";
+        generatesEvent = true;
         eventGen();
       }
       if(cursor > startIndex)
       {
         changeText = wholeText.subSequence(startIndex, cursor);
+        generatesEvent = true;
         eventGen();
       }
       cursor = startIndex;
       begin = true;
       timer.postDelayed(runEventGen, timerLength);
+      return generatesEvent;
     }
     private void eventGen()
     {
