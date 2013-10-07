@@ -121,7 +121,6 @@ public class MainActivity extends Activity
     switch ( item.getItemId() )
     {
       case R.id.action_undo:
-        //Log.d("@@@@@@@ Undo is selected!!!!!!", "undoEventStack.isEmpty()");
         if( undoEventStack.isEmpty() )
         {
           Log.e("MYMYundo", "The undo stack is empty");
